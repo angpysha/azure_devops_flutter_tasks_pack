@@ -1,0 +1,76 @@
+{
+    "$schema": "https://raw.githubusercontent.com/Microsoft/azure-pipelines-task-lib/master/tasks.schema.json",
+    "id": "9951f052-5804-4c5e-ae02-c611c7bcbac4",
+    "name": "flutter-build-android",
+    "friendlyName": "Build Flutter Android app",
+    "description": "Build Flutter Android app with custom parameters",
+    "helpMarkDown": "",
+    "category": "Utility",
+    "author": "Andrii Petrovskyi",
+    "version": {
+        "Major": 0,
+        "Minor": 1,
+        "Patch": 0
+    },
+    "instanceNameFormat": "Build Flutter Android app",
+    "inputs": [
+        {
+            "name": "path",
+            "type": "filePath",
+            "label": "Path to project folder",
+            "required": true,
+            "helpMarkDown": "Path to the project folder"
+        },
+        {
+            "name": "isRelease",
+            "type": "boolean",
+            "label": "Build release",
+            "required": true,
+            "defaultValue": true,
+            "helpMarkDown": "Build release version"
+        },
+        {
+            "name": "buildFlavor",
+            "type": "string",
+            "label": "Build flavor",
+            "required": false,
+            "defaultValue": "",
+            "helpMarkDown": "Build flavor to support multiple environments. See https://flutter.dev/docs/deployment/flavors for more details"
+        },
+        {
+            "name": "obfuscate",
+            "type": "boolean",
+            "label": "Obfuscate",
+            "required": false,
+            "defaultValue": false,
+            "helpMarkDown": "Obfuscate Dart code. See https://flutter.dev/docs/deployment/obfuscate for more details"
+        },
+        {
+            "name": "splitDebugInfo",
+            "type": "filePath",
+            "label": "Split debug info",
+            "required": false,
+            "defaultValue": "",
+            "helpMarkDown": "Path to the folder where to store split debug info. See https://flutter.dev/docs/deployment/obfuscate for more details"
+        },
+        {
+            "name": "bundleType",
+            "type": "pickList",
+            "label": "Bundle type",
+            "required": true,
+            "defaultValue": "apk",
+            "options": {
+                "apk": "APK",
+                "aab": "AAB (Android App Bundle)"
+            },
+            "helpMarkDown": "Bundle type to build. See https://flutter.dev/docs/deployment/android for more details"
+        }
+
+
+    ],
+    "execution": {
+        "Node": {
+            "target": "index.js"
+        }
+    }
+}

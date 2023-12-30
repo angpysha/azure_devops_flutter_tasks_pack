@@ -1,0 +1,54 @@
+{
+    "$schema": "https://raw.githubusercontent.com/Microsoft/azure-pipelines-task-lib/master/tasks.schema.json",
+    "id": "525b0e93-bbc6-4a9f-9692-2d47a1225381",
+    "name": "flutter-melos",
+    "friendlyName": "Run Melos command",
+    "description": "Use melos to run commands across multiple packages in a mono-repository. See https://melos.invertase.dev/~melos-latest/getting-started for more details",
+    "helpMarkDown": "",
+    "category": "Utility",
+    "author": "Andrii Petrovskyi",
+    "version": {
+        "Major": 0,
+        "Minor": 1,
+        "Patch": 0
+    },
+    "instanceNameFormat": "Run melos command",
+    "inputs": [
+        {
+            "name": "path",
+            "type": "filePath",
+            "label": "Path to project folder",
+            "required": true,
+            "helpMarkDown": "Path to the project folder"
+        },
+        {
+            "name": "command",
+            "type": "pickList",
+            "label": "Melos command",
+            "required": true,
+            "helpMarkDown": "Melos command to run",
+            "defaultValue": "version",
+            "options": {
+                "version": "version",
+                "bootstrap": "bootstrap",
+                "run": "run",
+                "exec": "exec",
+                "clean": "clean",
+                "list": "list",
+                "publish": "publish"
+            }
+        },
+        {
+            "name": "commandArgs",
+            "type": "string",
+            "label": "Melos command arguments",
+            "required": false,
+            "helpMarkDown": "Melos command arguments"
+        }
+    ],
+    "execution": {
+        "Node": {
+            "target": "index.js"
+        }
+    }
+}

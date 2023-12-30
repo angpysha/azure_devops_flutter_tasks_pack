@@ -1,0 +1,56 @@
+{
+    "$schema": "https://raw.githubusercontent.com/Microsoft/azure-pipelines-task-lib/master/tasks.schema.json",
+    "id": "78cc8baa-8567-487c-8bdd-55d5f238d57f",
+    "name": "flutter-replace-build-number",
+    "friendlyName": "Replace build number",
+    "description": "Replaces build number in flutter app in pubspec.yaml file",
+    "helpMarkDown": "",
+    "category": "Utility",
+    "author": "Andrii Petrovskyi",
+    "version": {
+        "Major": 0,
+        "Minor": 1,
+        "Patch": 0
+    },
+    "instanceNameFormat": "Replace build number and version in pubspec.yaml file",
+    "inputs": [
+        {
+            "name": "buildNumber",
+            "type": "string",
+            "label": "Build number (Should be integer number like 101)",
+            "defaultValue": "",
+            "required": true,
+            "helpMarkDown": "A string value which should be replaced in pubspec.yaml file with build number (it will be after '+')"
+        },
+        {
+            "name": "versionString",
+            "type": "string",
+            "label": "Version string (should in format 1.0.1)",
+            "defaultValue": "",
+            "required": true,
+            "helpMarkDown": "A string value which should be replaced in pubspec.yaml file with version string (it will be before '+')"
+        },
+        {
+            "name": "pubspecPath",
+            "type": "filePath",
+            "label": "Path to pubspec.yaml",
+            "defaultValue": "",
+            "required": true,
+            "helpMarkDown": "Path to pubspec.yaml file"
+        },
+        {
+            "name": "incrimentBuildNumber",
+            "type": "string",
+            "label": "Incriment build number",
+            "defaultValue": "0",
+            "required": false,
+            "helpMarkDown": "Incriment build number by this value"
+        }
+
+    ],
+    "execution": {
+        "Node": {
+            "target": "index.js"
+        }
+    }
+}

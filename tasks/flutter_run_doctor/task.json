@@ -1,0 +1,32 @@
+{
+    "$schema": "https://raw.githubusercontent.com/Microsoft/azure-pipelines-task-lib/master/tasks.schema.json",
+    "id": "f866d174-b876-4c50-b444-1b050e9c4bfb",
+    "name": "flutter-run-doctor",
+    "friendlyName": "Run flutter doctor",
+    "description": "Checks the flutter environment and displays a report to the console.",
+    "helpMarkDown": "",
+    "category": "Utility",
+    "author": "Andrii Petrovskyi",
+    "version": {
+        "Major": 0,
+        "Minor": 1,
+        "Patch": 0
+    },
+    "instanceNameFormat": "Check flutter environment",
+    "inputs": [
+        {
+            "name": "verbose",
+            "type": "boolean",
+            "label": "Verbose",
+            "defaultValue": false,
+            "required": true,
+            "helpMarkDown": "Verbose flutter doctor info output"
+        }
+
+    ],
+    "execution": {
+        "Node": {
+            "target": "index.js"
+        }
+    }
+}
