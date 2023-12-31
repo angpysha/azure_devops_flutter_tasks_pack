@@ -9,7 +9,7 @@
     "author": "Andrii Petrovskyi",
     "version": {
         "Major": 0,
-        "Minor": 1,
+        "Minor": 2,
         "Patch": 0
     },
     "instanceNameFormat": "Run melos command",
@@ -47,7 +47,7 @@
         }
     ],
     "execution": {
-        "Node": {
+        "Node16": {
             "target": "index.js"
         }
     }

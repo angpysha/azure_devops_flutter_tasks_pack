@@ -2,8 +2,8 @@
     "manifestVersion": 1,
     "id": "flutter-build-help-tools",
     "name": "Flutter Build Help Tools",
-    "version": "0.0.1",
-    "publisher": "Andrii Petrovskyi",
+    "version": "0.1.0",
+    "publisher": "AndriiPetrovskyi",
     "targets": [
         {
             "id": "Microsoft.VisualStudio.Services"

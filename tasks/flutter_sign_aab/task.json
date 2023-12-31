@@ -9,7 +9,7 @@
     "author": "Andrii Petrovskyi",
     "version": {
         "Major": 0,
-        "Minor": 1,
+        "Minor": 2,
         "Patch": 0
     },
     "instanceNameFormat": "Sign AAB",
@@ -56,17 +56,17 @@
         }
     ],
     "execution": {
-        "Node": {
+        "Node16": {
             "target": "index.js"
         }
     },
     "prejobexecution": {
-        "Node": {
+        "Node16": {
             "target": "prejob.js"
         }
     },
     "postjobexecution": {
-        "Node": {
+        "Node16": {
             "target": "postjob.js"
         }
     }
