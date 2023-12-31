@@ -10,7 +10,8 @@ async function run() {
     const bundleType = tl.getInput('bundleType', true);
     const obfuscate = tl.getBoolInput('obfuscate', false);
     const splitDebugInfo = tl.getPathInput('splitDebugInfo', false);
-    
+    const splitDebugInfoString = tl.getInput('splitDebugInfoString', false);
+
     if (projectPath === undefined) {
         throw new Error('Project path is required');
     }
@@ -43,7 +44,7 @@ async function run() {
         stringBuilder.push('--obfuscate');
     }
 
-    if (splitDebugInfo !== undefined && splitDebugInfo !== '') {
+    if (splitDebugInfoString !== undefined && splitDebugInfoString !== '') {
         stringBuilder.push(`--split-debug-info=${splitDebugInfo}`);
     }
 
