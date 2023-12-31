@@ -1,4 +1,5 @@
 import tl = require('azure-pipelines-task-lib/task');
+import tr = require('azure-pipelines-task-lib/toolrunner');
 import { async } from 'q';
 
 async function run() {
@@ -17,21 +18,23 @@ async function run() {
 
         const stringBuilder = new Array<string>();
 
-        stringBuilder.push('melos');
-
         stringBuilder.push(command);
 
         if (commandArgs !== undefined) {
             stringBuilder.push(commandArgs);
         }
+        
+        const commandExecutable = 'melos';
 
         const args = stringBuilder.join(' ');
 
         console.log(`Running: ${args}`);
 
-        console.log(`##vso[task.prependpath]${folderPath}`);
+        let options = <tr.IExecOptions>{
+            cwd: folderPath
+        };
 
-        let number = await tl.exec(args, null);
+        let number = await tl.exec(commandExecutable, args, options);
 
         if (number !== 0) {
             throw new Error('Melos failed');
@@ -43,3 +46,5 @@ async function run() {
         tl.setResult(tl.TaskResult.Failed, err.message);
     }
 }
+
+run();
