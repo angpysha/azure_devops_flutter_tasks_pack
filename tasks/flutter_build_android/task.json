@@ -10,7 +10,7 @@
     "version": {
         "Major": 0,
         "Minor": 3,
-        "Patch": 0
+        "Patch": 1
     },
     "instanceNameFormat": "Build Flutter Android app",
     "inputs": [
@@ -49,8 +49,9 @@
             "name": "splitDebugInfo",
             "type": "filePath",
             "label": "Split debug info",
-            "required": false,
+            "required": true,
             "defaultValue": "",
+            "visibleRule": "obfuscate = true",
             "helpMarkDown": "Path to the folder where to store split debug info. See https://flutter.dev/docs/deployment/obfuscate for more details"
         },
         {

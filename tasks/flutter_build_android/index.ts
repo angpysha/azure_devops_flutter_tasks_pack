@@ -44,7 +44,7 @@ async function run() {
         stringBuilder.push('--obfuscate');
     }
 
-    if (splitDebugInfoString !== undefined && splitDebugInfoString !== '') {
+    if (splitDebugInfoString !== undefined && splitDebugInfoString !== '' && obfuscate) {
         stringBuilder.push(`--split-debug-info=${splitDebugInfo}`);
     }
 

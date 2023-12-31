@@ -2,7 +2,7 @@
     "manifestVersion": 1,
     "id": "flutter-build-help-tools",
     "name": "Flutter Build Help Tools",
-    "version": "0.3.0",
+    "version": "0.4.0",
     "publisher": "AndriiPetrovskyi",
     "targets": [
         {
@@ -34,6 +34,9 @@
         },
         {
             "path": "tasks/flutter_build_ios"
+        },
+        {
+            "path": "tasks/flutter_xcode_archive"
         }
     ],
     "contributions": [
@@ -95,6 +98,16 @@
             ],
             "properties": {
                 "name": "tasks/flutter_build_ios"
+            }
+        },
+        {
+            "id": "flutter-xcode-archive-ios",
+            "type": "ms.vss-distributed-task.task",
+            "targets": [
+                "ms.vss-distributed-task.tasks"
+            ],
+            "properties": {
+                "name": "tasks/flutter_xcode_archive"
             }
         }
     ]
