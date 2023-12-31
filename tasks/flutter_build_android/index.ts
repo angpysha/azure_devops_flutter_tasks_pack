@@ -1,4 +1,5 @@
 import tl = require('azure-pipelines-task-lib/task');
+import tr = require('azure-pipelines-task-lib/toolrunner');
 import { async } from 'q';
 
 async function run() {
@@ -20,12 +21,14 @@ async function run() {
 
     const stringBuilder = new Array<string>();
 
-    stringBuilder.push('flutter build');
+    stringBuilder.push('build');
 
     if (bundleType === 'apk') {
         stringBuilder.push('apk');
-    } else if (bundleType === 'aab') {
+    } else if (bundleType === 'appbundle') {
         stringBuilder.push('appbundle');
+    } else {
+        throw new Error('Invalid bundle type');
     }
 
     if (useRelease) {
@@ -48,11 +51,15 @@ async function run() {
 
     console.log(`Running: ${command}`);
 
-    //const result = await tl.exec(command, null);
+    let options = <tr.IExecOptions>{
+        cwd: projectPath
+    };
 
-    // if (result !== 0) {
-    //     throw new Error('Flutter build failed');
-    // }
+    const result = await tl.exec('flutter', command, options);
+
+    if (result !== 0) {
+        throw new Error('Flutter build failed');
+    }
 
     tl.setResult(tl.TaskResult.Succeeded, 'Flutter build completed');
 

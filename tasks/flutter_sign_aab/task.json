@@ -29,11 +29,45 @@
             "defaultValue": "",
             "required": true,
             "helpMarkDown": "Keystore file to use for signing."
+        },
+        {
+            "name": "keystorePassword",
+            "type": "string",
+            "label": "Keystore password",
+            "defaultValue": "",
+            "required": true,
+            "helpMarkDown": "Use your keystore password."
+        },
+        {
+            "name": "keyAlias",
+            "type": "string",
+            "label": "Key alias",
+            "defaultValue": "",
+            "required": true,
+            "helpMarkDown": "Use your key alias."
+        },
+        {
+            "name": "verbose",
+            "type": "boolean",
+            "label": "Verbose",
+            "defaultValue": "false",
+            "required": false,
+            "helpMarkDown": "Enable verbose output."
         }
     ],
     "execution": {
         "Node": {
             "target": "index.js"
+        }
+    },
+    "prejobexecution": {
+        "Node": {
+            "target": "prejob.js"
+        }
+    },
+    "postjobexecution": {
+        "Node": {
+            "target": "postjob.js"
         }
     }
 }

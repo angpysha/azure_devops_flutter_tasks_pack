@@ -1,0 +1,88 @@
+{
+    "manifestVersion": 1,
+    "id": "flutter-build-help-tools",
+    "name": "Flutter Build Help Tools",
+    "version": "0.0.1",
+    "publisher": "Andrii Petrovskyi",
+    "targets": [
+        {
+            "id": "Microsoft.VisualStudio.Services"
+        }
+    ],    
+    "description": "Help tools for flutter build and release. Using this extension can prevent using custom scripts for flutter build and release.",
+    "categories": [
+        "Azure Pipelines"
+    ],
+    "icons": {
+        "default": "ext_icon.png"        
+    },
+    "files": [
+        {
+            "path": "tasks/flutter_build_android"
+        },
+        {
+            "path": "tasks/flutter_melos"
+        },
+        {
+            "path": "tasks/flutter_run_doctor"
+        },
+        {
+            "path": "tasks/flutter_sign_aab"
+        },
+        {
+            "path": "tasks/replace-build-number"
+        }
+    ],
+    "contributions": [
+        {
+            "id": "flutter-build-android",
+            "type": "ms.vss-distributed-task.task",
+            "targets": [
+                "ms.vss-distributed-task.tasks"
+            ],
+            "properties": {
+                "name": "tasks/flutter_build_android"
+            }
+        },
+        {
+            "id": "flutter-melos",
+            "type": "ms.vss-distributed-task.task",
+            "targets": [
+                "ms.vss-distributed-task.tasks"
+            ],
+            "properties": {
+                "name": "tasks/flutter_melos"
+            }
+        },
+        {
+            "id": "flutter-run-doctor",
+            "type": "ms.vss-distributed-task.task",
+            "targets": [
+                "ms.vss-distributed-task.tasks"
+            ],
+            "properties": {
+                "name": "tasks/flutter_run_doctor"
+            }
+        },
+        {
+            "id": "flutter-sign-aab",
+            "type": "ms.vss-distributed-task.task",
+            "targets": [
+                "ms.vss-distributed-task.tasks"
+            ],
+            "properties": {
+                "name": "tasks/flutter_sign_aab"
+            }
+        },
+        {
+            "id": "flutter-replace-build-number",
+            "type": "ms.vss-distributed-task.task",
+            "targets": [
+                "ms.vss-distributed-task.tasks"
+            ],
+            "properties": {
+                "name": "tasks/replace-build-number"
+            }
+        }
+    ]
+}
