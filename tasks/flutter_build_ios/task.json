@@ -48,6 +48,14 @@
                 "ipa": "IPA"
             },
             "helpMarkDown": "Bundle type to build. See https://flutter.dev/docs/deployment/ios for more details"
+        },
+        {
+            "name": "nosign",
+            "type": "boolean",
+            "label": "Do not sign",
+            "required": true,
+            "defaultValue": false,
+            "helpMarkDown": "Do not sign the app"
         }
 
 

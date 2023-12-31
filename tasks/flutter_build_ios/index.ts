@@ -8,6 +8,7 @@ async function run() {
     const useRelease = tl.getBoolInput('isRelease', true);
     const flavor = tl.getInput('buildFlavor', false);
     const bundleType = tl.getInput('bundleType', true);
+    const nosign = tl.getBoolInput('nosign', false);
 
     if (projectPath === undefined) {
         throw new Error('Project path is required');
@@ -25,6 +26,10 @@ async function run() {
 
     if (useRelease) {
         stringBuilder.push('--release');
+    }
+
+    if (nosign) {
+        stringBuilder.push('--no-codesign');
     }
 
     if (flavor !== undefined && flavor !== '') {
