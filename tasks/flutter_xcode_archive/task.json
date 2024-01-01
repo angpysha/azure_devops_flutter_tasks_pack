@@ -10,7 +10,7 @@
     "version": {
         "Major": 0,
         "Minor": 2,
-        "Patch": 1
+        "Patch": 2
     },
     "instanceNameFormat": "Xcode Archive for Flutter iOS",
     "inputs": [
@@ -113,5 +113,13 @@
         "Node16": {
             "target": "postjob.js"
         }
-    }
+    },
+    "restrictions": {
+        "commands": {
+          "mode": "restricted"
+        },
+        "settableVariables": {
+          "allowed": []
+        }
+      }
 }
