@@ -1,0 +1,83 @@
+{
+    "$schema": "https://raw.githubusercontent.com/Microsoft/azure-pipelines-task-lib/master/tasks.schema.json",
+    "id": "15ee4efb-2a30-466f-a5be-677228066dec",
+    "name": "flutter-firebase",
+    "friendlyName": "Build Flutter iOS app",
+    "description": "Build Flutter iOS app with custom parameters",
+    "helpMarkDown": "",
+    "category": "Utility",
+    "author": "Andrii Petrovskyi",
+    "version": {
+        "Major": 0,
+        "Minor": 1,
+        "Patch": 0
+    },
+    "instanceNameFormat": "Build Flutter iOS app",
+    "inputs": [
+        {
+            "name" : "type",
+            "type": "pickList",
+            "label": "Type",
+            "defaultValue": "distribute",
+            "required": true,
+            "helpMarkDown": "Type of firebase util",
+            "options": {
+                "distribute": "Distribute",
+                "custom": "Custom"
+            }
+        },
+        {
+            "name": "path",
+            "type": "filePath",
+            "label": "Path to binary to upload",
+            "required": true,
+            "helpMarkDown": "Path to the project folder",
+            "visibleRule": "type = distribute"
+        },
+        {
+            "name": "appId",
+            "type": "string",
+            "label": "App ID",
+            "required": true,
+            "helpMarkDown": "App ID",
+            "visibleRule": "type = distribute"
+        },
+        {
+            "name": "releaseNotes",
+            "type": "filePath",
+            "label": "Release notes",
+            "required": false,
+            "helpMarkDown": "Release notes",
+            "visibleRule": "type = distribute"
+        },
+        {
+            "name": "groups",
+            "type": "multiLine",
+            "label": "Groups",
+            "required": true,
+            "helpMarkDown": "Groups",
+            "visibleRule": "type = distribute"
+        },
+        {
+            "name": "customArgs",
+            "type": "multiLine",
+            "label": "Custom arguments",
+            "required": true,
+            "helpMarkDown": "Custom arguments",
+            "visibleRule": "type = other"
+        },
+        {
+            "name": "credentials",
+            "type": "secureFile",
+            "label": "Google service account credentials",
+            "required": true,
+            "helpMarkDown": "Google service account credentials"
+        }
+
+    ],
+    "execution": {
+        "Node16": {
+            "target": "index.js"
+        }
+    }
+}
