@@ -9,8 +9,11 @@ async function run() {
     try {
 
         const type = tl.getInput('taskType', true);
-
+        const verbose = tl.getBoolInput('verbose', true);
         if (type === 'export') {
+            if (verbose) {
+                console.log('Prejob for export task');
+            }
 
             const keystoreFileId = tl.getInput('exportOptionsPlist', true);
 
@@ -18,7 +21,11 @@ async function run() {
                 throw new Error('Export options plist is required.');
             }
 
-            const secureFileHelpers: secureFilesCommon.SecureFileHelpers = new secureFilesCommon.SecureFileHelpers();
+            if (verbose) {
+                console.log(`Downloading ExportOptions.plist file with id ${keystoreFileId}`);
+            }
+
+            const secureFileHelpers: secureFilesCommon.SecureFileHelpers = new secureFilesCommon.SecureFileHelpers(8);
             const keystoreFilePath: string = await secureFileHelpers.downloadSecureFile(keystoreFileId);
             tl.setTaskVariable('EXPORT_OPTIONS_PLIST_PATH', keystoreFilePath);
         }

@@ -10,7 +10,7 @@
     "version": {
         "Major": 0,
         "Minor": 2,
-        "Patch": 2
+        "Patch": 5
     },
     "instanceNameFormat": "Xcode Archive for Flutter iOS",
     "inputs": [
@@ -85,6 +85,7 @@
        {
         "name": "exportOptionsPlist",
         "type": "secureFile",
+        "defaultValue": "",
         "label": "Export options plist",
         "required": true,
         "helpMarkDown": "Export options plist",
@@ -97,6 +98,14 @@
         "required": true,
         "helpMarkDown": "Export path",
         "visibleRule": "taskType = export"
+       },
+       {
+        "name": "verbose",
+        "type": "boolean",
+        "label": "Verbose",
+        "defaultValue": "false",
+        "required": true,
+        "helpMarkDown": "Verbose"
        }
     ],
     "execution": {

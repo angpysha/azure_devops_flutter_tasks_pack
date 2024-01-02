@@ -36,7 +36,7 @@ async function run() {
             if (keystoreFileId === undefined) {
                 throw new Error('Keystore file is required');
             }
-            const secureFileHelpers = new secureFilesCommon.SecureFileHelpers();
+            const secureFileHelpers = new secureFilesCommon.SecureFileHelpers(8);
             const keystoreFilePath = await secureFileHelpers.downloadSecureFile(keystoreFileId);
             tl.setTaskVariable('KEYSTORE_FILE_PATH_AAB', keystoreFilePath);
         }

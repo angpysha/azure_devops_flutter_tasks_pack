@@ -28,12 +28,19 @@ const secureFilesCommon = __importStar(require("azure-pipelines-tasks-securefile
 async function run() {
     try {
         const type = tl.getInput('taskType', true);
+        const verbose = tl.getBoolInput('verbose', true);
         if (type === 'export') {
+            if (verbose) {
+                console.log('Prejob for export task');
+            }
             const keystoreFileId = tl.getInput('exportOptionsPlist', true);
             if (keystoreFileId === undefined) {
                 throw new Error('Export options plist is required.');
             }
-            const secureFileHelpers = new secureFilesCommon.SecureFileHelpers();
+            if (verbose) {
+                console.log(`Downloading ExportOptions.plist file with id ${keystoreFileId}`);
+            }
+            const secureFileHelpers = new secureFilesCommon.SecureFileHelpers(8);
             const keystoreFilePath = await secureFileHelpers.downloadSecureFile(keystoreFileId);
             tl.setTaskVariable('EXPORT_OPTIONS_PLIST_PATH', keystoreFilePath);
         }
