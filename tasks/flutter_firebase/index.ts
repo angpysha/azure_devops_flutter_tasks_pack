@@ -6,7 +6,7 @@ import * as fs from 'fs';
 async function distribute() {
    const filePath = tl.getPathInput('path', true);
    const appId = tl.getInput('appId', true);
-   const releaseNotes = tl.getInput('releaseNotes', false);
+   const releaseNotes = tl.getPathInput('releaseNotes', false);
    const distribuionGroups = tl.getInput('groups', true);
 
     if (filePath === undefined) {
@@ -37,7 +37,10 @@ async function distribute() {
 
     if (releaseNotes !== undefined) {
         stringBuilder.push('--release-notes');
-        stringBuilder.push(releaseNotes);
+        
+        var releaseNotesText = fs.readFileSync(releaseNotes, 'utf8');
+        releaseNotesText = releaseNotesText.substring(0, 200);
+        stringBuilder.push(releaseNotesText);
     }
 
     stringBuilder.push('--no-interactive');
@@ -82,8 +85,7 @@ async function run() {
 
         if (fs.existsSync(googleServicesJsonPath)) {
             //This way is recommended by Google instead using legacy --token
-            tl.setVariable('GOOGLE_APPLICATION_CREDENTIALS', googleServicesJsonPath);
-        }
+            tl.setVariable('GOOGLE_APPLICATION_CREDENTIALS', googleServicesJsonPath);        }
 
         const type = tl.getInput('type', true);
 
