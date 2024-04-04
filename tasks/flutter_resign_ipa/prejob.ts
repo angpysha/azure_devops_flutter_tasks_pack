@@ -9,20 +9,20 @@ async function run() {
         const verbose: boolean = tl.getBoolInput('verbose');
 
         // download keystore file
-        const keystoreFileId = tl.getInput('keystoreFile', true);
+        const keystoreFileId = tl.getInput('provisioningProfile', true);
 
         if (keystoreFileId === undefined) {
-            throw new Error('Keystore file is required');
+            throw new Error('Provioning profile is required');
         }
 
         const secureFileHelpers: secureFilesCommon.SecureFileHelpers = new secureFilesCommon.SecureFileHelpers(8);
         const keystoreFilePath: string = await secureFileHelpers.downloadSecureFile(keystoreFileId);
 
         if (verbose) {
-            console.log('Downloaded keystore file to: ' + keystoreFilePath);
+            console.log('Downloaded profile to file to: ' + keystoreFilePath);
         }
 
-        tl.setTaskVariable('KEYSTORE_FILE_PATH_AAB', keystoreFilePath);
+        tl.setTaskVariable('PROVISIONING_PROFILE', keystoreFilePath);
     } catch (err: any) {
         tl.setResult(tl.TaskResult.Failed, err.message);
     }

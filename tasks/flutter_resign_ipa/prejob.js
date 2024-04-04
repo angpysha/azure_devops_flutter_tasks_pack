@@ -31,16 +31,16 @@ async function run() {
         tl.setResourcePath(path.join(__dirname, 'task.json'));
         const verbose = tl.getBoolInput('verbose');
         // download keystore file
-        const keystoreFileId = tl.getInput('keystoreFile', true);
+        const keystoreFileId = tl.getInput('provisioningProfile', true);
         if (keystoreFileId === undefined) {
-            throw new Error('Keystore file is required');
+            throw new Error('Provioning profile is required');
         }
         const secureFileHelpers = new secureFilesCommon.SecureFileHelpers(8);
         const keystoreFilePath = await secureFileHelpers.downloadSecureFile(keystoreFileId);
         if (verbose) {
-            console.log('Downloaded keystore file to: ' + keystoreFilePath);
+            console.log('Downloaded profile to file to: ' + keystoreFilePath);
         }
-        tl.setTaskVariable('KEYSTORE_FILE_PATH_AAB', keystoreFilePath);
+        tl.setTaskVariable('PROVISIONING_PROFILE', keystoreFilePath);
     }
     catch (err) {
         tl.setResult(tl.TaskResult.Failed, err.message);

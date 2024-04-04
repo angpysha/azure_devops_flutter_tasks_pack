@@ -23,27 +23,23 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const fs = __importStar(require("fs"));
 const path = __importStar(require("path"));
-const secureFilesCommon = __importStar(require("azure-pipelines-tasks-securefiles-common/securefiles-common"));
 const tl = __importStar(require("azure-pipelines-task-lib/task"));
 async function run() {
     try {
         tl.setResourcePath(path.join(__dirname, 'task.json'));
-        const verbose = tl.getBoolInput('verbose');
-        // download keystore file
-        const keystoreFileId = tl.getInput('keystoreFile', true);
-        if (keystoreFileId === undefined) {
-            throw new Error('Keystore file is required');
+        const keystoreFile = tl.getTaskVariable('PROVISIONING_PROFILE');
+        if (keystoreFile === undefined) {
+            throw new Error('Profisioning profile is required');
         }
-        const secureFileHelpers = new secureFilesCommon.SecureFileHelpers(8);
-        const keystoreFilePath = await secureFileHelpers.downloadSecureFile(keystoreFileId);
-        if (verbose) {
-            console.log('Downloaded keystore file to: ' + keystoreFilePath);
+        if (keystoreFile && tl.exist(keystoreFile)) {
+            fs.unlinkSync(keystoreFile);
+            tl.debug('Deleted profisioning profile downloaded from the server: ' + keystoreFile);
         }
-        tl.setTaskVariable('KEYSTORE_FILE_PATH_AAB', keystoreFilePath);
     }
     catch (err) {
-        tl.setResult(tl.TaskResult.Failed, err.message);
+        tl.warning(tl.loc('DeleteKeystoreFileFailed', err));
     }
 }
 run();

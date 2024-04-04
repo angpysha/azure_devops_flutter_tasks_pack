@@ -1,0 +1,63 @@
+{
+    "$schema": "https://raw.githubusercontent.com/Microsoft/azure-pipelines-task-lib/master/tasks.schema.json",
+    "id": "738a549c-4faa-4d42-8268-1756470e0e11",
+    "name": "flutter-resign-ipa",
+    "friendlyName": "Resign Flutter iOS app",
+    "description": "Resign IPA file with new provisioning profile",
+    "helpMarkDown": "",
+    "category": "Utility",
+    "author": "Andrii Petrovskyi",
+    "version": {
+        "Major": 0,
+        "Minor": 1,
+        "Patch": 0
+    },
+    "instanceNameFormat": "Resign IPA file",
+    "inputs": [
+        {
+            "name": "path",
+            "type": "filePath",
+            "label": "Path to ipa file",
+            "required": true,
+            "helpMarkDown": "Path to the IPA file to resign"
+        },
+        {
+            "name": "signIdentity",
+            "type": "string",
+            "label": "Sign identity",
+            "required": true,
+            "defaultValue": "",
+            "helpMarkDown": "Sign identity to use for resigning. E.g. 'iPhone Distribution: Company Name (XXXXXXXXXX)'"
+        },
+        {
+            "name": "provisioningProfile",
+            "type": "secureFile",
+            "label": "Provisioning profile",
+            "required": true,
+            "helpMarkDown": "Path to the provisioning profile to use for resigning"
+        }
+    ],
+    "execution": {
+        "Node16": {
+            "target": "index.js"
+        }
+    },
+    "prejobexecution": {
+        "Node16": {
+            "target": "prejob.js"
+        }
+    },
+    "postjobexecution": {
+        "Node16": {
+            "target": "postjob.js"
+        }
+    },
+    "restrictions": {
+        "commands": {
+          "mode": "restricted"
+        },
+        "settableVariables": {
+          "allowed": []
+        }
+      }
+}

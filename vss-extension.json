@@ -2,7 +2,7 @@
     "manifestVersion": 1,
     "id": "flutter-build-help-tools",
     "name": "Flutter Build Help Tools",
-    "version": "0.5.0",
+    "version": "0.7.2",
     "publisher": "AndriiPetrovskyi",
     "targets": [
         {
@@ -37,6 +37,9 @@
         },
         {
             "path": "tasks/flutter_xcode_archive"
+        },
+        {
+            "path": "tasks/flutter_resign_ipa"
         }
     ],
     "contributions": [
@@ -108,6 +111,16 @@
             ],
             "properties": {
                 "name": "tasks/flutter_xcode_archive"
+            }
+        },
+        {
+            "id": "flutter-resign-ipa",
+            "type": "ms.vss-distributed-task.task",
+            "targets": [
+                "ms.vss-distributed-task.tasks"
+            ],
+            "properties": {
+                "name": "tasks/flutter_resign_ipa"
             }
         }
     ]
