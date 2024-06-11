@@ -9,7 +9,7 @@
     "author": "Andrii Petrovskyi",
     "version": {
         "Major": 0,
-        "Minor": 2,
+        "Minor": 3,
         "Patch": 0
     },
     "instanceNameFormat": "Build Flutter iOS app",
@@ -56,6 +56,23 @@
             "required": true,
             "defaultValue": false,
             "helpMarkDown": "Do not sign the app"
+        },
+        {
+            "name": "obfuscate",
+            "type": "boolean",
+            "label": "Obfuscate",
+            "required": false,
+            "defaultValue": false,
+            "helpMarkDown": "Obfuscate Dart code. See https://flutter.dev/docs/deployment/obfuscate for more details"
+        },
+        {
+            "name": "splitDebugInfo",
+            "type": "filePath",
+            "label": "Split debug info",
+            "required": true,
+            "defaultValue": "",
+            "visibleRule": "obfuscate = true",
+            "helpMarkDown": "Path to the folder where to store split debug info. See https://flutter.dev/docs/deployment/obfuscate for more details"
         }
 
 

@@ -7,43 +7,24 @@ async function run() {
     const projectPath = tl.getPathInput('path', true);
     const useRelease = tl.getBoolInput('isRelease', true);
     const flavor = tl.getInput('buildFlavor', false);
-    const bundleType = tl.getInput('bundleType', true);
-    const nosign = tl.getBoolInput('nosign', false);
-    const obfuscate = tl.getBoolInput('obfuscate', false);
-    const splitDebugInfo = tl.getPathInput('splitDebugInfo', true);
 
     if (projectPath === undefined) {
         throw new Error('Project path is required');
-    }
-
-    if (bundleType === undefined) {
-        throw new Error('Bundle type is required');
     }
 
     const stringBuilder = new Array<string>();
 
     stringBuilder.push('build');
 
-    stringBuilder.push(bundleType);
 
     if (useRelease) {
         stringBuilder.push('--release');
     }
 
-    if (nosign) {
-        stringBuilder.push('--no-codesign');
-    }
-
     if (flavor !== undefined && flavor !== '') {
         stringBuilder.push(`--flavor ${flavor}`);
-    }
-
-    if (obfuscate) {    
-        stringBuilder.push('--obfuscate');
-    }
-
-    if (splitDebugInfo !== undefined && obfuscate) {
-        stringBuilder.push(`--split-debug-info=${splitDebugInfo}`);
+        tl.setVariable('FLAVOR', flavor);
+        tl.setVariable('BUILD_CONFIGURATION', useRelease ? 'Release' : 'Debug')
     }
 
     const command = stringBuilder.join(' ');
@@ -54,7 +35,6 @@ async function run() {
         cwd: projectPath
     };
 
-    // console.log(`Running: flutter ${command}`);
     const result = await tl.exec('flutter', command, options);
 
     if (result !== 0) {

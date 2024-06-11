@@ -1,0 +1,49 @@
+{
+    "$schema": "https://raw.githubusercontent.com/Microsoft/azure-pipelines-task-lib/master/tasks.schema.json",
+    "id": "0e6b49e6-e10f-41e2-9a52-29ff3f984815",
+    "name": "flutter-build-windows",
+    "friendlyName": "Build Flutter Windows app",
+    "description": "Build Flutter Windows app with custom parameters",
+    "helpMarkDown": "",
+    "category": "Utility",
+    "author": "Andrii Petrovskyi",
+    "version": {
+        "Major": 0,
+        "Minor": 1,
+        "Patch": 0
+    },
+    "instanceNameFormat": "Build Flutter Android app",
+    "inputs": [
+        {
+            "name": "path",
+            "type": "filePath",
+            "label": "Path to project folder",
+            "required": true,
+            "helpMarkDown": "Path to the project folder"
+        },
+        {
+            "name": "isRelease",
+            "type": "boolean",
+            "label": "Build release",
+            "required": true,
+            "defaultValue": true,
+            "helpMarkDown": "Build release version"
+        },
+        {
+            "name": "buildFlavor",
+            "type": "string",
+            "label": "Build flavor",
+            "required": false,
+            "defaultValue": "",
+            "helpMarkDown": "Build flavor to support multiple environments. See https://flutter.dev/docs/deployment/flavors for more details"
+        },
+        {
+            "name": "cert"
+        }
+    ],
+    "execution": {
+        "Node16": {
+            "target": "index.js"
+        }
+    }
+}

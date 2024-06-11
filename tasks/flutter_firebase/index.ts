@@ -33,14 +33,14 @@ async function distribute() {
     stringBuilder.push(appId);
 
     stringBuilder.push('--groups');
-    stringBuilder.push(distribuionGroups);
+    stringBuilder.push(`"${distribuionGroups}"`);
 
     if (releaseNotes !== undefined) {
         stringBuilder.push('--release-notes');
         
         var releaseNotesText = fs.readFileSync(releaseNotes, 'utf8');
         releaseNotesText = releaseNotesText.substring(0, 200);
-        stringBuilder.push(releaseNotesText);
+        stringBuilder.push(`"${releaseNotesText}"`);
     }
 
     stringBuilder.push('--no-interactive');

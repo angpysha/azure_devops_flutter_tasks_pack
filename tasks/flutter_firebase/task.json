@@ -1,18 +1,18 @@
 {
     "$schema": "https://raw.githubusercontent.com/Microsoft/azure-pipelines-task-lib/master/tasks.schema.json",
-    "id": "15ee4efb-2a30-466f-a5be-677228066dec",
+    "id": "746acee1-7dd3-44ea-bcd2-1a181207715a",
     "name": "flutter-firebase",
-    "friendlyName": "Build Flutter iOS app",
-    "description": "Build Flutter iOS app with custom parameters",
+    "friendlyName": "Upload Flutter app to Firebase",
+    "description": "Upload Flutter app to Firebase distribution",
     "helpMarkDown": "",
     "category": "Utility",
     "author": "Andrii Petrovskyi",
     "version": {
         "Major": 0,
         "Minor": 1,
-        "Patch": 0
+        "Patch": 2
     },
-    "instanceNameFormat": "Build Flutter iOS app",
+    "instanceNameFormat": "Upload Flutter app to Firebase",
     "inputs": [
         {
             "name" : "type",
@@ -79,5 +79,23 @@
         "Node16": {
             "target": "index.js"
         }
-    }
+    },
+    "prejobexecution": {
+        "Node16": {
+            "target": "prejob.js"
+        }
+    },
+    "postjobexecution": {
+        "Node16": {
+            "target": "postjob.js"
+        }
+    },
+    "restrictions": {
+        "commands": {
+          "mode": "restricted"
+        },
+        "settableVariables": {
+          "allowed": []
+        }
+      }
 }

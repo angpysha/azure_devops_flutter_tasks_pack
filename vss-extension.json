@@ -2,7 +2,7 @@
     "manifestVersion": 1,
     "id": "flutter-build-help-tools",
     "name": "Flutter Build Help Tools",
-    "version": "0.7.2",
+    "version": "0.9.2",
     "publisher": "AndriiPetrovskyi",
     "targets": [
         {
@@ -40,6 +40,9 @@
         },
         {
             "path": "tasks/flutter_resign_ipa"
+        },
+        {
+            "path": "tasks/flutter_firebase"
         }
     ],
     "contributions": [
@@ -121,6 +124,16 @@
             ],
             "properties": {
                 "name": "tasks/flutter_resign_ipa"
+            }
+        },
+        {
+            "id": "flutter-firebase",
+            "type": "ms.vss-distributed-task.task",
+            "targets": [
+                "ms.vss-distributed-task.tasks"
+            ],
+            "properties": {
+                "name": "tasks/flutter_firebase"
             }
         }
     ]
