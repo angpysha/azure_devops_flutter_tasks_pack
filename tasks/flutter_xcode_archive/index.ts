@@ -85,7 +85,7 @@ async function exportArchive() {
     const projectPath = tl.getPathInput('path', true);
     const archivePath = tl.getPathInput('archivePath', true);
 
-    const exportOptionsPath = tl.getTaskVariable('EXPORT_OPTIONS_PLIST_PATH');
+    var exportOptionsPath = tl.getTaskVariable('EXPORT_OPTIONS_PLIST_PATH');
     const exportPath = tl.getPathInput('exportPath', true);
 
     if (projectPath === undefined) {
@@ -95,6 +95,8 @@ async function exportArchive() {
     if (archivePath === undefined) {
         throw new Error('Archive path is required');
     }
+
+    exportOptionsPath = process.env.EXPORT_OPTIONS_PLIST_PATH;
 
     if (exportOptionsPath === undefined) {
         throw new Error('Export options path is required');

@@ -1,0 +1,14 @@
+{
+    "compilerOptions": {
+      "target": "es2022",  
+      "module": "commonjs",
+      "outDir": "./tasks",
+      "rootDir": "./tasks",
+      "strict": true,
+      "esModuleInterop": true,
+      "skipLibCheck": true,
+      "forceConsistentCasingInFileNames": true
+    },
+    "include": ["tasks/**/*.ts"],
+    "exclude": ["node_modules"]
+  }
