@@ -1,0 +1,36 @@
+{
+    "$schema": "https://raw.githubusercontent.com/Microsoft/azure-pipelines-task-lib/master/tasks.schema.json",
+    "id": "39159f24-3b68-49d1-a458-ecaf2233653c",
+    "name": "check-path",
+    "friendlyName": "Check path",
+    "description": "Checks if the path exists",
+    "helpMarkDown": "",
+    "category": "Utility",
+    "author": "Andrii Petrovskyi",
+    "version": {
+        "Major": 0,
+        "Minor": 1,
+        "Patch": 0
+    },
+    "instanceNameFormat": "Check path",
+    "inputs": [
+        {
+            "name": "path",
+            "type": "filePath",
+            "label": "Path to project folder",
+            "required": true,
+            "helpMarkDown": "Path to the project folder"
+        }
+    ],
+    "outputVariables": [
+        {
+            "name": "pathExists",
+            "description": "True if the path exists, false otherwise"
+        }
+    ],
+    "execution": {
+        "Node16": {
+            "target": "index.js"
+        }
+    }
+}

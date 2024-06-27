@@ -9,7 +9,7 @@
     "author": "Andrii Petrovskyi",
     "version": {
         "Major": 0,
-        "Minor": 1,
+        "Minor": 3,
         "Patch": 5
     },
     "instanceNameFormat": "Upload Flutter app to Firebase",
@@ -23,6 +23,7 @@
             "helpMarkDown": "Type of firebase util",
             "options": {
                 "distribute": "Distribute",
+                "uploadIOSSymbols": "Upload iOS symbols",
                 "custom": "Custom"
             }
         },
@@ -71,23 +72,43 @@
             "type": "secureFile",
             "label": "Google service account credentials",
             "required": true,
+            "visibleRule": "type = distribute || type = custom",
             "helpMarkDown": "Google service account credentials"
+        },
+        {
+            "name": "nointeractive",
+            "type": "boolean",
+            "label": "No interactive",
+            "required": false,
+            "helpMarkDown": "No interactive",
+            "defaultValue": "true"
+        },
+        {
+            "name": "uploaderPath",
+            "type": "filePath",
+            "label": "Path to firebase distribution uploader",
+            "required": true,
+            "visibleRule": "type = uploadIOSSymbols"
+        },
+        {
+            "name": "symbolsPath",
+            "type": "filePath",
+            "label": "Path to symbols",
+            "required": true,
+            "visibleRule": "type = uploadIOSSymbols"
+        },
+        {
+            "name": "googleServicesJson",
+            "type": "secureFile",
+            "label": "Path to Google services json",
+            "required": true,
+            "visibleRule": "type = uploadIOSSymbols"
         }
 
     ],
     "execution": {
         "Node16": {
             "target": "index.js"
-        }
-    },
-    "prejobexecution": {
-        "Node16": {
-            "target": "prejob.js"
-        }
-    },
-    "postjobexecution": {
-        "Node16": {
-            "target": "postjob.js"
         }
     }
 }
