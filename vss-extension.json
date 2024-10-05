@@ -2,7 +2,7 @@
     "manifestVersion": 1,
     "id": "flutter-build-help-tools",
     "name": "Flutter Build Help Tools",
-    "version": "0.10.5",
+    "version": "0.12.1",
     "publisher": "AndriiPetrovskyi",
     "targets": [
         {
@@ -46,6 +46,12 @@
         },
         {
             "path": "tasks/check_path"
+        },
+        {
+            "path": "tasks/flutter_upload_ipa_testflight"
+        },
+        {
+            "path": "tasks/flutter_upload_aab_googleplay"
         }
     ],
     "contributions": [
@@ -147,6 +153,26 @@
             ],
             "properties": {
                 "name": "tasks/check_path"
+            }
+        },
+        {
+            "id": "flutter-upload-testflight",
+            "type": "ms.vss-distributed-task.task",
+            "targets": [
+                "ms.vss-distributed-task.tasks"
+            ],
+            "properties": {
+                "name": "tasks/flutter_upload_ipa_testflight"
+            }
+        },
+        {
+            "id": "flutter-upload-aab-googleplay",
+            "type": "ms.vss-distributed-task.task",
+            "targets": [
+                "ms.vss-distributed-task.tasks"
+            ],
+            "properties": {
+                "name": "tasks/flutter_upload_aab_googleplay"
             }
         }
     ]

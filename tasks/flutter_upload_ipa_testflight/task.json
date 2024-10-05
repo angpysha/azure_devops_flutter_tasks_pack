@@ -1,0 +1,97 @@
+{
+    "$schema": "https://raw.githubusercontent.com/Microsoft/azure-pipelines-task-lib/master/tasks.schema.json",
+    "id": "ff24fe6c-0dac-4472-9ce0-ab552be369be",
+    "name": "flutter-upload-testflight",
+    "friendlyName": "Upload to TestFlight",
+    "description": "Upload AAB file to TestFlight using fastlane. Using command `fastlane pilot upload`.",
+    "helpMarkDown": "Uplaod fastlane to TestFlight. Required data for the task: IPA file, p8 key file, Key ID, Issuer ID, Team ID. p8 can be created in the Apple Developer Portal. Link to the Keys section: https://developer.apple.com/account/resources/authkeys/list. Link to the Membership section: https://developer.apple.com/account/#/membership",
+    "category": "Utility",
+    "author": "Andrii Petrovskyi",
+    "version": {
+        "Major": 0,
+        "Minor": 1,
+        "Patch": 3
+    },
+    "instanceNameFormat": "Upload to TestFlight",
+    "inputs": [
+        {
+            "name": "ipaFile",
+            "type": "filePath",
+            "label": "IPA file",
+            "defaultValue": "",
+            "required": true,
+            "helpMarkDown": "Path to the IPA file to upload."
+        },
+        {
+            "name": "keyFile",
+            "type": "secureFile",
+            "label": "p8 key file",
+            "defaultValue": "",
+            "required": true,
+            "helpMarkDown": "Path to the p8 key file. The key file is used to authenticate with the Apple Developer Portal."
+        },
+        {
+            "name": "keyId",
+            "type": "string",
+            "label": "Key ID",
+            "defaultValue": "Apple Developer Portal Key ID",
+            "required": true,
+            "helpMarkDown": "Key ID from the Apple Developer Portal. Can be found in the Keys section. Link to the Keys section: https://developer.apple.com/account/resources/authkeys/list"
+        },
+        {
+            "name": "issuerId",
+            "type": "string",
+            "label": "issuerId",
+            "defaultValue": "",
+            "required": true,
+            "helpMarkDown": "Issuer ID from the Apple Developer Portal. Can be found in the Keys section. Link to the Keys section: https://developer.apple.com/account/resources/authkeys/list"
+        },
+        {
+            "name": "teamId",
+            "type": "string",
+            "label": "Team ID",
+            "defaultValue": "",
+            "required": false,
+            "helpMarkDown": "Team ID from the Apple Developer Portal. Can be found in the Membership section. Link to the Membership section: https://developer.apple.com/account/#/membership"
+        },
+        {
+            "name": "duration",
+            "type": "int",
+            "label": "Duration",
+            "defaultValue": "500",
+            "required": false,
+            "helpMarkDown": "The time in seconds that the uploaded build will be active. Default is 500 seconds. Using for the command `fastlane pilot upload`. Can be read more about the command here: https://docs.fastlane.tools/actions/pilot/"
+        },
+        {
+            "name": "verbose",
+            "type": "boolean",
+            "label": "Verbose",
+            "defaultValue": "false",
+            "required": false,
+            "helpMarkDown": "Enable verbose output."
+        }
+    ],
+    "execution": {
+        "Node16": {
+            "target": "index.js"
+        }
+    },
+    "prejobexecution": {
+        "Node16": {
+            "target": "prejob.js"
+        }
+    },
+    "postjobexecution": {
+        "Node16": {
+            "target": "postjob.js"
+        }
+    },
+    "restrictions": {
+        "commands": {
+          "mode": "restricted"
+        },
+        "settableVariables": {
+          "allowed": []
+        }
+      }
+}
