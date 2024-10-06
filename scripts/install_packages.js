@@ -1,9 +1,8 @@
+const fetchFolders = require('./folders_fetcher');
 const { execSync } = require('child_process');
 const fs = require('fs');
 const path = require('path');
-
 const tasksDir = path.join(__dirname, '..', 'tasks');
-
 // Get folders in the tasks directory
 
 
@@ -11,18 +10,19 @@ const tasksDir = path.join(__dirname, '..', 'tasks');
 // Install node modules in each task directory
 
 async function run() {
-    console.log('Installing node modules in all task directories...');
-    console.log(tasksDir);
-    // const items = fs.readdirSync(tasksDir);
-    // console.log(items);
-    const taskDirs = fs.readdirSync(tasksDir).filter(file => {
-        const fullPath = path.join(tasksDir, file);
-        let isDir = fs.statSync(fullPath).isDirectory();
-        // Check if the folder contains a package.json file as well
-        if (!isDir) return false;
-        let hasPackageJson = fs.readdirSync(fullPath).includes('package.json');
-        return isDir && hasPackageJson;
-    });
+    // console.log('Installing node modules in all task directories...');
+    // console.log(tasksDir);
+    // // const items = fs.readdirSync(tasksDir);
+    // // console.log(items);
+    // const taskDirs = fs.readdirSync(tasksDir).filter(file => {
+    //     const fullPath = path.join(tasksDir, file);
+    //     let isDir = fs.statSync(fullPath).isDirectory();
+    //     // Check if the folder contains a package.json file as well
+    //     if (!isDir) return false;
+    //     let hasPackageJson = fs.readdirSync(fullPath).includes('package.json');
+    //     return isDir && hasPackageJson;
+    // });
+    let taskDirs = fetchFolders();
     // console.log(taskDirs);
 
     for (const taskDir of taskDirs) {
