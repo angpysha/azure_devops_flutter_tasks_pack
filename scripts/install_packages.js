@@ -10,18 +10,6 @@ const tasksDir = path.join(__dirname, '..', 'tasks');
 // Install node modules in each task directory
 
 async function run() {
-    // console.log('Installing node modules in all task directories...');
-    // console.log(tasksDir);
-    // // const items = fs.readdirSync(tasksDir);
-    // // console.log(items);
-    // const taskDirs = fs.readdirSync(tasksDir).filter(file => {
-    //     const fullPath = path.join(tasksDir, file);
-    //     let isDir = fs.statSync(fullPath).isDirectory();
-    //     // Check if the folder contains a package.json file as well
-    //     if (!isDir) return false;
-    //     let hasPackageJson = fs.readdirSync(fullPath).includes('package.json');
-    //     return isDir && hasPackageJson;
-    // });
     let taskDirs = fetchFolders();
     // console.log(taskDirs);
 
@@ -29,7 +17,7 @@ async function run() {
         const fullPath = path.join(tasksDir, taskDir);
         console.log(`Installing node modules in ${fullPath}...`);
         try {
-          //  execSync('yarn install', { cwd: fullPath, stdio: 'inherit' });
+             execSync('yarn install', { cwd: fullPath, stdio: 'inherit' });
         } catch (err) {
             console.error(`Failed to install node modules in ${fullPath}.`);
             console.error(err);
