@@ -17,7 +17,11 @@ async function run() {
     // console.log(items);
     const taskDirs = fs.readdirSync(tasksDir).filter(file => {
         const fullPath = path.join(tasksDir, file);
-        return fs.statSync(fullPath).isDirectory();
+        let isDir = fs.statSync(fullPath).isDirectory();
+        // Check if the folder contains a package.json file as well
+        if (!isDir) return false;
+        let hasPackageJson = fs.readdirSync(fullPath).includes('package.json');
+        return isDir && hasPackageJson;
     });
     // console.log(taskDirs);
 
