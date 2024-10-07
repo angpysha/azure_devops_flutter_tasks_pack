@@ -42,3 +42,7 @@ jobs:
           tfx extension create --manifest-globs ./vss-extension.json
           
         pwsh: true
+    - task: PublishBuildArtifacts@1
+      inputs:
+        targetPath: '$(Build.SourcesDirectory)/*.vsix'
+        artifactName: 'vsix'
