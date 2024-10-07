@@ -5,3 +5,5 @@ index.js
 yarn.lock
 
 *.vsix
+
+tasks/**/*.js

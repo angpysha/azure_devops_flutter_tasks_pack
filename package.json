@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "install_packages": "node scripts/install_packages.js"
+    "install_packages": "node scripts/install_packages.js",
+    "compile_tasks": "node scripts/tasks_compiler.js"
   },
   "keywords": [],
   "author": "",

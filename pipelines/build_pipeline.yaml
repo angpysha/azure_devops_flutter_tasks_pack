@@ -1,0 +1,45 @@
+trigger:
+ - main
+
+name: $(Build.BuildId)
+
+variables:
+- name: AZP_AGENT_CLEANUP_PSMODULES_IN_POWERSHELL
+  value: true
+
+jobs:
+  - job: build_job
+    displayName: 'Build VSIX extension'
+    pool: 
+    # Can used MS hosted - it will be open source project
+     vmImage: 'windows-latest'
+    steps:
+    # run the node run command
+    - task: Npm@1
+      description: 'Install packages using yarn'
+      inputs:
+        command: 'custom'
+        workingDir: '$(Build.SourcesDirectory)'
+        customCommand: 'run install_packages'
+    # run build command to build the extension
+    - task: Npm@1
+      displayName: 'Compile typescript'
+      inputs:
+        command: 'custom'
+        workingDir: '$(Build.SourcesDirectory)'
+        customCommand: 'run compile_tasks'
+    # build command using tfx-cli
+    - task: TfxInstaller@4
+      inputs:
+        version: 'v0.x'
+    - task: PowerShell@2
+      inputs:
+        targetType: 'inline'
+        script: |
+          # Write your PowerShell commands here.
+          
+          Set-Location -Path $(Build.SourcesDirectory)
+
+          tfx extension create --manifest-globs ./vss-extension.json
+          
+        pwsh: true
