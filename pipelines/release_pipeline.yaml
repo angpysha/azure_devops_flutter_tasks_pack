@@ -22,7 +22,9 @@ jobs:
       version: 'v0.x'
   - task: PublishAzureDevOpsExtension@4
     inputs:
-      connectTo: 'MarketPlaceServiceConnection'
+      connectTo: 'VsTeam'
+      connectedServiceName: 'MarketPlaceServiceConnection'
       fileType: 'vsix'
-      vsixFile: '$(Agent.BuildDirectory)/build_pipeline/vsix/*.vsix'
+      vsixFile: '$(Agent.BuildDirectory)/build_pipeline/vsix/*.vsix'''
       updateTasksVersion: false
+      extensionVisibility: 'private'
