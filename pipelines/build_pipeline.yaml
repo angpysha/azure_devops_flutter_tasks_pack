@@ -40,9 +40,14 @@ jobs:
           Set-Location -Path $(Build.SourcesDirectory)
 
           tfx extension create --manifest-globs ./vss-extension.json
+
+          mkdir vsix_output
+
+          # Move the vsix file to the output folder
+          Move-Item -Path ./*.vsix -Destination ./vsix_output
           
         pwsh: true
     - task: PublishBuildArtifacts@1
       inputs:
-        targetPath: '$(Build.SourcesDirectory)/*.vsix'
+        targetPath: '$(Build.SourcesDirectory)/vsix_output'
         artifactName: 'vsix'
