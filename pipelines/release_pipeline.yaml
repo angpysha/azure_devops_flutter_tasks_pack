@@ -14,8 +14,12 @@ jobs:
   pool: 
     vmImage: 'windows-latest'
   steps:
+  - checkout: none
   - download: build_pipeline
     artifact: vsix
+  - task: TfxInstaller@4
+    inputs:
+      version: 'v0.x'
   - task: PublishAzureDevOpsExtension@4
     inputs:
       connectTo: 'MarketPlaceServiceConnection'
