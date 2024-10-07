@@ -1,0 +1,24 @@
+# AzureDevOpsFlutterTasksPack-Build
+
+trigger: none
+
+resources:
+  pipelines:
+    - pipeline: build_pipeline
+      source: AzureDevOpsFlutterTasksPack-Build
+      trigger: true
+
+jobs:
+- job: release_job
+  displayName: 'Deploy extension to Azure DevOps Marketplace'
+  pool: 
+    vmImage: 'windows-latest'
+  steps:
+  - download: build_pipeline
+    artifact: vsix
+  - task: PublishAzureDevOpsExtension@4
+    inputs:
+      connectTo: 'MarketPlaceServiceConnection'
+      fileType: 'vsix'
+      vsixFile: '$(Agent.BuildDirectory)/build_pipeline/vsix/*.vsix'
+      updateTasksVersion: false
