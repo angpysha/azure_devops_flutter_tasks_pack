@@ -20,11 +20,25 @@ jobs:
   - task: TfxInstaller@4
     inputs:
       version: 'v0.x'
+  - task: PowerShell@2
+    inputs:
+      targetType: 'inline'
+      script: |
+        # Write your PowerShell commands here.
+        
+        Set-Location -Path $(Agent.BuildDirectory)/build_pipeline/vsix
+        
+        #rename the vsix first file
+        $vsixFile = Get-ChildItem -Path .\*.vsix
+        $newName = "AzureDevOpsFlutterTasksPack.vsix"
+        Rename-Item -Path $vsixFile -NewName $newName
+
+      pwsh: true
   - task: PublishAzureDevOpsExtension@4
     inputs:
       connectTo: 'VsTeam'
       connectedServiceName: 'MarketPlaceServiceConnection'
       fileType: 'vsix'
-      vsixFile: '$(Agent.BuildDirectory)/build_pipeline/vsix/*.vsix'''
+      vsixFile: '$(Agent.BuildDirectory)/build_pipeline/vsix/AzureDevOpsFlutterTasksPack.vsix'
       updateTasksVersion: false
       extensionVisibility: 'private'
