@@ -47,7 +47,9 @@ jobs:
           Move-Item -Path ./*.vsix -Destination ./vsix_output
           
         pwsh: true
-    - task: PublishBuildArtifacts@1
+    - task: PublishPipelineArtifact@1
+      displayName: 'Publish Artifact: vsix'
       inputs:
         targetPath: '$(Build.SourcesDirectory)/vsix_output'
-        artifactName: 'vsix'
+        artifact: 'vsix'
+        publishLocation: 'pipeline'
