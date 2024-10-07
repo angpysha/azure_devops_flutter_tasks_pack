@@ -1,5 +1,4 @@
-trigger:
- - main
+trigger: none
 
 name: $(Build.BuildId)
 
@@ -16,7 +15,7 @@ jobs:
     steps:
     # run the node run command
     - task: Npm@1
-      description: 'Install packages using yarn'
+      displayName: 'Install packages using yarn'
       inputs:
         command: 'custom'
         workingDir: '$(Build.SourcesDirectory)'
