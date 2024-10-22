@@ -18,6 +18,7 @@ async function run() {
         const teamId = tl.getInput('teamId', false);
         const verbose = tl.getBoolInput('verbose', false);
         const duration = tl.getInput('duration', false);
+        const waitUntilBuildIsProcessed = tl.getBoolInput('waitProcessing', false);
         // THis task will execute analog to powersehll script
 
         // # Write your PowerShell commands here.
@@ -126,6 +127,11 @@ async function run() {
         stringBuilder.push(generalKeyFilePath);
         stringBuilder.push('--ipa');
         stringBuilder.push(ipaPath);
+
+        if (waitUntilBuildIsProcessed == false) {
+            stringBuilder.push('--skip_waiting_for_build_processing');
+            stringBuilder.push('true');
+        }
 
         const command = stringBuilder.join(' ');
 
