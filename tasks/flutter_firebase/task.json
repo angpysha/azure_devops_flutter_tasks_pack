@@ -9,8 +9,8 @@
     "author": "Andrii Petrovskyi",
     "version": {
         "Major": 0,
-        "Minor": 3,
-        "Patch": 5
+        "Minor": 4,
+        "Patch": 0
     },
     "instanceNameFormat": "Upload Flutter app to Firebase",
     "inputs": [
@@ -24,6 +24,7 @@
             "options": {
                 "distribute": "Distribute",
                 "uploadIOSSymbols": "Upload iOS symbols",
+                "uploadFlutterDebugInfo": "Upload Flutter debug info",
                 "custom": "Custom"
             }
         },
@@ -103,6 +104,20 @@
             "label": "Path to Google services json",
             "required": true,
             "visibleRule": "type = uploadIOSSymbols"
+        },
+        {
+            "name": "debugInfoPath",
+            "type": "filePath",
+            "label": "Path to directory with debug info",
+            "required": true,
+            "visibleRule": "type = uploadFlutterDebugInfo"
+        },
+        {
+            "name": "firebaseAppId",
+            "type": "string",
+            "label": "Id of the Firebase app",
+            "required": true,
+            "visibleRule": "type = uploadFlutterDebugInfo"
         }
 
     ],

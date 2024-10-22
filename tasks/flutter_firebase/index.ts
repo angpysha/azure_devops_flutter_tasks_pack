@@ -4,6 +4,8 @@ import { async } from 'q';
 import * as fs from 'fs';
 import * as secureFilesCommon from 'azure-pipelines-tasks-securefiles-common/securefiles-common';
 
+type FlutterFirebaseTaskType = 'distribute' | 'uploadIOSSymbols' | 'uploadFlutterDebugInfo' | 'custom';
+
 async function distribute() {
     const filePath = tl.getPathInput('path', true);
     const appId = tl.getInput('appId', true);
@@ -157,6 +159,44 @@ async function custom() {
     tl.setResult(tl.TaskResult.Succeeded, 'Firebase command succeeded.');
 }
 
+async function uploadFlutterDebugInfo() {
+    try {
+        let debugInfoPath = tl.getPathInput('debugInfoPath', true);
+        let firebaseAppId = tl.getInput('firebaseAppId', true);
+        if (debugInfoPath === undefined) {
+            throw new Error('Debug info path is required.');
+        }
+
+        if (!fs.existsSync(debugInfoPath)) {
+            throw new Error('Debug info path does not exist.');
+        }
+
+        if (firebaseAppId === undefined) {
+            throw new Error('Firebase App ID is required.');
+        }
+
+        const executable = 'firebase';
+        const stringBuilder = new Array<string>();
+
+        stringBuilder.push('crashlytics:symbols:upload');
+        stringBuilder.push('--app');
+        stringBuilder.push(firebaseAppId);
+        stringBuilder.push(debugInfoPath);
+
+        const args = stringBuilder.join(' ');
+
+        const result = tl.execSync(executable, args);
+
+        if (result.code !== 0) {
+            throw new Error(result.stderr);
+        }
+
+        tl.setResult(tl.TaskResult.Succeeded, 'Firebase debug info upload succeeded.');
+    } catch (err: any) {
+        tl.setResult(tl.TaskResult.Failed, err.message);
+    }
+}
+
 async function run() {
     try {
         const type = tl.getInput('type', true);
@@ -164,6 +204,8 @@ async function run() {
         if (type === undefined) {
             throw new Error('Task type is required');
         }
+
+        let typeEnum: FlutterFirebaseTaskType = type as FlutterFirebaseTaskType;
 
         var googleAccountCredentialsPath: string | undefined;
 
@@ -194,6 +236,8 @@ async function run() {
             await custom();
         } else if (type === 'uploadIOSSymbols') {
             await uploadSymbols();
+        } else if (type === 'uploadFlutterDebugInfo') {
+            await uploadFlutterDebugInfo();
         }
 
         if (googleAccountCredentialsPath !== undefined) {
