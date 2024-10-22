@@ -209,7 +209,7 @@ async function run() {
 
         var googleAccountCredentialsPath: string | undefined;
 
-        if (type !== 'uploadIOSSymbols') {
+        if (type !== 'uploadIOSSymbols' && type !== 'uploadFlutterDebugInfo') {
             const keystoreFileId = tl.getInput('credentials', true);
 
             if (keystoreFileId === undefined) {

@@ -20,6 +20,11 @@ jobs:
         command: 'custom'
         workingDir: '$(Build.SourcesDirectory)'
         customCommand: 'run install_packages'
+    - task: PowerShell@2
+      displayName: 'Install typescript'
+      inputs:
+        targetType: 'inline'
+        script: 'npm install -g typescript'
     # run build command to build the extension
     - task: Npm@1
       displayName: 'Compile typescript'

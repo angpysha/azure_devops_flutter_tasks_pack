@@ -1,5 +1,4 @@
 # AzureDevOpsFlutterTasksPack-Build
-
 trigger: none
 
 resources:
