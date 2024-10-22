@@ -9,8 +9,8 @@
     "author": "Andrii Petrovskyi",
     "version": {
         "Major": 0,
-        "Minor": 1,
-        "Patch": 3
+        "Minor": 2,
+        "Patch": 0
     },
     "instanceNameFormat": "Upload to TestFlight",
     "inputs": [
@@ -61,6 +61,14 @@
             "defaultValue": "500",
             "required": false,
             "helpMarkDown": "The time in seconds that the uploaded build will be active. Default is 500 seconds. Using for the command `fastlane pilot upload`. Can be read more about the command here: https://docs.fastlane.tools/actions/pilot/"
+        },
+        {
+            "name": "waitProcessing",
+            "type": "boolean",
+            "label": "Wait until App Store processing is finished",
+            "defaultValue": "true",
+            "required": true,
+            "helpMarkDown": "Wait until App Store processing is finished. Using for the command `fastlane pilot upload`. Can be read more about the command here: https://docs.fastlane.tools/actions/pilot/"
         },
         {
             "name": "verbose",
