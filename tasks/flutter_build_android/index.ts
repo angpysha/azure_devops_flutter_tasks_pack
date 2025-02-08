@@ -10,6 +10,13 @@ async function run() {
     const bundleType = tl.getInput('bundleType', true);
     const obfuscate = tl.getBoolInput('obfuscate', false);
     const splitDebugInfo = tl.getPathInput('splitDebugInfo', true);
+    const customExecutable = tl.getInput('customExecutable', false);
+
+    let flutterExecutable = 'flutter';
+
+    if (customExecutable !== undefined && customExecutable !== '') {
+        flutterExecutable = customExecutable;
+    }
 
     if (projectPath === undefined) {
         throw new Error('Project path is required');
@@ -55,7 +62,7 @@ async function run() {
         cwd: projectPath
     };
 
-    const result = await tl.exec('flutter', command, options);
+    const result = await tl.exec(flutterExecutable, command, options);
 
     if (result !== 0) {
         throw new Error('Flutter build failed');

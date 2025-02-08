@@ -9,8 +9,8 @@
     "author": "Andrii Petrovskyi",
     "version": {
         "Major": 0,
-        "Minor": 3,
-        "Patch": 3
+        "Minor": 4,
+        "Patch": 0
     },
     "instanceNameFormat": "Build Flutter Android app",
     "inputs": [
@@ -65,9 +65,15 @@
                 "aab": "AAB (Android App Bundle)"
             },
             "helpMarkDown": "Bundle type to build. See https://flutter.dev/docs/deployment/android for more details"
+        },
+        {
+            "name": "customExecutable",
+            "type": "string",
+            "label": "Custom executable",
+            "required": false,
+            "defaultValue": "",
+            "helpMarkDown": "Path to custom executable to build the app. You can use **fvm flutter** or **flutter** commands"
         }
-
-
     ],
     "execution": {
         "Node16": {

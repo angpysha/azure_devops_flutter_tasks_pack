@@ -9,7 +9,7 @@
     "author": "Andrii Petrovskyi",
     "version": {
         "Major": 0,
-        "Minor": 3,
+        "Minor": 4,
         "Patch": 0
     },
     "instanceNameFormat": "Build Flutter iOS app",
@@ -73,9 +73,15 @@
             "defaultValue": "",
             "visibleRule": "obfuscate = true",
             "helpMarkDown": "Path to the folder where to store split debug info. See https://flutter.dev/docs/deployment/obfuscate for more details"
+        },
+        {
+            "name": "customExecutable",
+            "type": "string",
+            "label": "Custom executable",
+            "required": false,
+            "defaultValue": "",
+            "helpMarkDown": "Path to custom executable to build the app. You can use **fvm flutter** or **flutter** commands"
         }
-
-
     ],
     "execution": {
         "Node16": {
