@@ -6,14 +6,16 @@ import { async } from 'q';
  * Archive the build
  */
 async function archive() {
+    const signOnArchive = tl.getBoolInput('signOnArchive', true);
+
     const projectPath = tl.getPathInput('path', true);
     const archivePath = tl.getPathInput('archivePath', true);
 
     const buildScheme = tl.getInput('scheme', true);
     const buildConfiguration = tl.getInput('configuration', true);
     const xcodeWorkspacePath = tl.getPathInput('workspace', true);
-    const signIdentity = tl.getInput('signIdentity', true);
-    const provisioningProfileUuid = tl.getInput('provisioningProfile', true);
+    const signIdentity = tl.getInput('signIdentity', false);
+    const provisioningProfileUuid = tl.getInput('provisioningProfile', false);
 
     if (projectPath === undefined) {
         throw new Error('Project path is required');
@@ -35,57 +37,63 @@ async function archive() {
         throw new Error('Workspace is required');
     }
 
-    if (signIdentity === undefined) {
+    if (signOnArchive === undefined) {
+        throw new Error('Sign on archive is required');
+    }
+
+    if (signIdentity === undefined && signOnArchive) {
         throw new Error('Sign identity is required');
     }
 
-    if (provisioningProfileUuid === undefined) {
+    if (provisioningProfileUuid === undefined && signOnArchive) {
         throw new Error('Provisioning profile is required');
     }
 
-    const stringBuilder = new Array<string>();
+    let toolRunner = tl.tool('xcodebuild');
+    toolRunner.arg('archive');
 
-    stringBuilder.push('archive');
+    toolRunner.arg('-scheme');
+    toolRunner.arg(buildScheme);
 
-    stringBuilder.push('-scheme');
-    stringBuilder.push(buildScheme);
+    toolRunner.arg('-configuration');
+    toolRunner.arg(buildConfiguration);
 
-    stringBuilder.push('-configuration');
-    stringBuilder.push(buildConfiguration);
+    toolRunner.arg('-workspace');
+    toolRunner.arg(xcodeWorkspacePath);
 
-    stringBuilder.push('-workspace');
-    stringBuilder.push(xcodeWorkspacePath);
+    toolRunner.arg('-archivePath');
+    toolRunner.arg(archivePath);
 
-    stringBuilder.push('-archivePath');
-    stringBuilder.push(archivePath);
-
-    stringBuilder.push('CODE_SIGN_STYLE=Manual');
-
-    stringBuilder.push(`CODE_SIGN_IDENTITY=${signIdentity}`);
-    stringBuilder.push(`PROVISIONING_PROFILE=${provisioningProfileUuid}`);
-
-    const command = stringBuilder.join(' ');
-
-    console.log(`Running:xcodebuild ${command}`);
+    if (!signOnArchive) {
+        // CODE_SIGN_IDENTITY="" \
+        // CODE_SIGNING_REQUIRED=NO \
+        // CODE_SIGNING_ALLOWED=NO
+        toolRunner.arg('CODE_SIGN_IDENTITY=""');
+        toolRunner.arg('CODE_SIGNING_REQUIRED=NO');
+        toolRunner.arg('CODE_SIGNING_ALLOWED=NO');
+    } else {
+        toolRunner.arg('CODE_SIGN_STYLE=Manual');
+        toolRunner.arg(`CODE_SIGN_IDENTITY=${signIdentity}`);
+        toolRunner.arg(`PROVISIONING_PROFILE=${provisioningProfileUuid}`);
+    }
 
     const options = <tr.IExecOptions>{ 
         cwd: projectPath
     };
-
-    const result = await tl.exec('xcodebuild', command, options);
+    const result = await toolRunner.exec(options);
 
     if (result !== 0) {
         throw new Error('Xcode build failed');
     }
 
-    tl.setResult(tl.TaskResult.Succeeded, 'Xcode build completed');
+    tl.setResult(tl.TaskResult.Succeeded, 'Xcode archive completed');
 }
 
 async function exportArchive() {
+
     const projectPath = tl.getPathInput('path', true);
     const archivePath = tl.getPathInput('archivePath', true);
-
-    var exportOptionsPath = tl.getTaskVariable('EXPORT_OPTIONS_PLIST_PATH');
+    const exportOptionsPath = tl.getPathInput('exportOptionsPath', true);
     const exportPath = tl.getPathInput('exportPath', true);
 
     if (projectPath === undefined) {
@@ -96,8 +104,6 @@ async function exportArchive() {
         throw new Error('Archive path is required');
     }
 
-    exportOptionsPath = process.env.EXPORT_OPTIONS_PLIST_PATH;
-
     if (exportOptionsPath === undefined) {
         throw new Error('Export options path is required');
     }
@@ -106,35 +112,30 @@ async function exportArchive() {
         throw new Error('Export path is required');
     }
 
-    const stringBuilder = new Array<string>();
+    let toolRunner = tl.tool('xcodebuild');
 
-    stringBuilder.push('-exportArchive');
+    toolRunner.arg('exportArchive');
 
-    stringBuilder.push('-archivePath');
-    stringBuilder.push(archivePath);
+    toolRunner.arg('-archivePath');
+    toolRunner.arg(archivePath);
 
-    stringBuilder.push('-exportOptionsPlist');
-    stringBuilder.push(exportOptionsPath);
+    toolRunner.arg('-exportOptionsPlist');
+    toolRunner.arg(exportOptionsPath);
 
-    stringBuilder.push('-exportPath');
-    stringBuilder.push(exportPath);
+    toolRunner.arg('-exportPath');
+    toolRunner.arg(exportPath);
 
-    const command = stringBuilder.join(' ');
-
-    console.log(`Running:xcodebuild ${command}`);
-
-    let options = <tr.IExecOptions>{
+    const options = <tr.IExecOptions>{ 
         cwd: projectPath
     };
 
-    const result = await tl.exec('xcodebuild', command, options);
+    const result = await toolRunner.exec(options);
 
     if (result !== 0) {
-        throw new Error('Xcode build failed');
+        throw new Error('Xcode export failed');
     }
 
-    tl.setResult(tl.TaskResult.Succeeded, 'Xcode build completed');
-
+    tl.setResult(tl.TaskResult.Succeeded, 'Xcode export completed');
 }
 
 async function run() {

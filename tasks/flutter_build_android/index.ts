@@ -10,13 +10,11 @@ async function run() {
     const bundleType = tl.getInput('bundleType', true);
     const obfuscate = tl.getBoolInput('obfuscate', false);
     const splitDebugInfo = tl.getPathInput('splitDebugInfo', true);
-    const customExecutable = tl.getInput('customExecutable', false);
+    const useFvm = tl.getBoolInput('useFvm', false);
+    const fvmVersion = tl.getInput('fvmVersion', false);
 
     let flutterExecutable = 'flutter';
-
-    if (customExecutable !== undefined && customExecutable !== '') {
-        flutterExecutable = customExecutable;
-    }
+    let fvmExecutable = 'fvm';
 
     if (projectPath === undefined) {
         throw new Error('Project path is required');
@@ -26,43 +24,51 @@ async function run() {
         throw new Error('Bundle type is required');
     }
 
-    const stringBuilder = new Array<string>();
+    let toolRunner = tl.tool(useFvm ? fvmExecutable : flutterExecutable);
 
-    stringBuilder.push('build');
-
-    if (bundleType === 'apk') {
-        stringBuilder.push('apk');
-    } else if (bundleType === 'appbundle') {
-        stringBuilder.push('appbundle');
-    } else {
-        throw new Error('Invalid bundle type');
+    if (useFvm && fvmVersion === undefined) {
+        throw new Error('FVM version is required');
     }
-
-    if (useRelease) {
-        stringBuilder.push('--release');
-    }
-
-    if (flavor !== undefined && flavor !== '') {
-        stringBuilder.push(`--flavor ${flavor}`);
-    }
-
-    if (obfuscate) {    
-        stringBuilder.push('--obfuscate');
-    }
-
-    if (splitDebugInfo !== undefined && obfuscate) {
-        stringBuilder.push(`--split-debug-info=${splitDebugInfo}`);
-    }
-
-    const command = stringBuilder.join(' ');
-
-    console.log(`Running: ${command}`);
 
     let options = <tr.IExecOptions>{
         cwd: projectPath
     };
 
-    const result = await tl.exec(flutterExecutable, command, options);
+    if (useFvm && fvmVersion !== undefined) {
+      toolRunner.arg('flutter');
+      let fvmUseRunner = tl.tool('fvm');
+      fvmUseRunner.arg('use');
+      fvmUseRunner.arg(fvmVersion);
+      await fvmUseRunner.exec(options);
+    }
+
+    toolRunner.arg('build');
+
+    if (bundleType === 'apk') {
+        toolRunner.arg('apk');
+    } else if (bundleType === 'appbundle') {
+        toolRunner.arg('appbundle');
+    } else {
+        throw new Error('Invalid bundle type');
+    }
+
+    if (useRelease) {
+        toolRunner.arg('--release');
+    }
+
+    if (flavor !== undefined && flavor !== '') {
+        toolRunner.arg(`--flavor ${flavor}`);
+    }
+
+    if (obfuscate) {    
+        toolRunner.arg('--obfuscate');
+    }
+
+    if (splitDebugInfo !== undefined && obfuscate) {
+        toolRunner.arg(`--split-debug-info=${splitDebugInfo}`);
+    }
+
+    const result = await toolRunner.exec(options);
 
     if (result !== 0) {
         throw new Error('Flutter build failed');

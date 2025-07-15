@@ -16,27 +16,21 @@ async function run() {
             throw new Error('Command is required');
         }
 
-        const stringBuilder = new Array<string>();
+        let toolRunner = tl.tool('melos');
 
-        stringBuilder.push(command);
+        toolRunner.arg(command);
 
         if (commandArgs !== undefined) {
-            stringBuilder.push(commandArgs);
+            toolRunner.arg(commandArgs);
         }
-        
-        const commandExecutable = 'melos';
-
-        const args = stringBuilder.join(' ');
-
-        console.log(`Running: ${args}`);
 
         let options = <tr.IExecOptions>{
             cwd: folderPath
         };
 
-        let number = await tl.exec(commandExecutable, args, options);
+        const result = await toolRunner.exec(options);
 
-        if (number !== 0) {
+        if (result !== 0) {
             throw new Error('Melos failed');
         }
 

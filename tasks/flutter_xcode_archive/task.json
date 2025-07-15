@@ -9,8 +9,8 @@
     "author": "Andrii Petrovskyi",
     "version": {
         "Major": 0,
-        "Minor": 2,
-        "Patch": 5
+        "Minor": 4,
+        "Patch": 0
     },
     "instanceNameFormat": "Xcode Archive for Flutter iOS",
     "inputs": [
@@ -43,6 +43,14 @@
         }
        },
        {
+        "name": "signOnArchive",
+        "type": "boolean",
+        "label": "Sign on archive",
+        "defaultValue": "true",
+        "required": true,
+        "helpMarkDown": "Sign on archive"
+       },
+       {
         "name": "configuration",
         "type": "string",
         "label": "Configuration",
@@ -70,17 +78,17 @@
         "name": "signIdentity",
         "type": "string",
         "label": "Sign identity",
-        "required": true,
+        "required": false,
         "helpMarkDown": "Sign identity",
-        "visibleRule": "taskType = archive"
+        "visibleRule": "taskType = archive && signOnArchive = true"
        },
        {
         "name": "provisioningProfile",
         "type": "string",
         "label": "Provisioning profile UUID",
-        "required": true,
+        "required": false,
         "helpMarkDown": "Provisioning profile UUID",
-        "visibleRule": "taskType = archive"
+        "visibleRule": "taskType = archive && signOnArchive = true"
        },
        {
         "name": "exportOptionsPlist",

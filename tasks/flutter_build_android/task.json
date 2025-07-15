@@ -9,7 +9,7 @@
     "author": "Andrii Petrovskyi",
     "version": {
         "Major": 0,
-        "Minor": 4,
+        "Minor": 5,
         "Patch": 0
     },
     "instanceNameFormat": "Build Flutter Android app",
@@ -67,12 +67,23 @@
             "helpMarkDown": "Bundle type to build. See https://flutter.dev/docs/deployment/android for more details"
         },
         {
-            "name": "customExecutable",
+            "name": "useFvm",
+            "type": "boolean",
+            "label": "Use FVM",
+            "required": false,
+            "defaultValue": false,
+            "helpMarkDown": "Use Flutter Version Management to build the app. See https://fvm.app for more details",
+            "groupName": "Advanced"
+        },
+        {
+            "name": "fvmVersion",
             "type": "string",
-            "label": "Custom executable",
+            "label": "FVM version",
             "required": false,
             "defaultValue": "",
-            "helpMarkDown": "Path to custom executable to build the app. You can use **fvm flutter** or **flutter** commands"
+            "helpMarkDown": "Version of Flutter to use with FVM. See https://fvm.app for more details",
+            "groupName": "Advanced",
+            "visibleRule": "useFvm = true"
         }
     ],
     "execution": {

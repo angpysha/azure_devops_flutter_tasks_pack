@@ -26,38 +26,35 @@ async function distribute() {
 
     const executable = 'firebase';
 
-    const stringBuilder = new Array<string>();
+    let toolRunner = tl.tool(executable);
 
-    stringBuilder.push('appdistribution:distribute');
+    toolRunner.arg('appdistribution:distribute');
+    toolRunner.arg(filePath);
 
-    stringBuilder.push(filePath);
+    toolRunner.arg('--app');
+    toolRunner.arg(appId);
 
-    stringBuilder.push('--app');
-    stringBuilder.push(appId);
-
-    stringBuilder.push('--groups');
-    stringBuilder.push(`"${distribuionGroups}"`);
+    toolRunner.arg('--groups');
+    toolRunner.arg(distribuionGroups);
 
     if (releaseNotes !== undefined) {
-        stringBuilder.push('--release-notes');
+        toolRunner.arg('--release-notes');
 
         var releaseNotesText = fs.readFileSync(releaseNotes, 'utf8');
         releaseNotesText = releaseNotesText.substring(0, 200);
-        stringBuilder.push(`"${releaseNotesText}"`);
+        toolRunner.arg(`"${releaseNotesText}"`);
     }
 
     const noInteractive = tl.getBoolInput('noInteractive', false);
 
     if (noInteractive) {
-        stringBuilder.push('--no-interactive');
+        toolRunner.arg('--no-interactive');
     }
 
-    const args = stringBuilder.join(' ');
+    const result = await toolRunner.exec();
 
-    const result = tl.execSync(executable, args);
-
-    if (result.code !== 0) {
-        throw new Error(result.stderr);
+    if (result !== 0) {
+        throw new Error("Firebase distribution failed.");
     }
 
     tl.setResult(tl.TaskResult.Succeeded, 'Firebase distribution succeeded.');
@@ -125,19 +122,30 @@ async function uploadSymbols() {
 }
 
 async function uploadItem(uploaderPath: string, symbolPath: string, googleServicesJsonPath: string): Promise<number> {
-    const stringBuilder = new Array<string>();
+    // const stringBuilder = new Array<string>();
 
-    //stringBuilder.push(uploaderPath);
-    stringBuilder.push('-gsp');
-    stringBuilder.push(googleServicesJsonPath);
-    stringBuilder.push('-p');
-    stringBuilder.push('ios');
-    stringBuilder.push(symbolPath);
+    // //stringBuilder.push(uploaderPath);
+    // stringBuilder.push('-gsp');
+    // stringBuilder.push(googleServicesJsonPath);
+    // stringBuilder.push('-p');
+    // stringBuilder.push('ios');
+    // stringBuilder.push(symbolPath);
 
-    const args = stringBuilder.join(' ');
+    // const args = stringBuilder.join(' ');
 
-    console.log(`Running: ${uploaderPath} ${args}`);
-    const result = await tl.exec(uploaderPath, args);
+    // console.log(`Running: ${uploaderPath} ${args}`);
+    // const result = await tl.exec(uploaderPath, args);
+
+    let toolRunner = tl.tool(uploaderPath);
+
+    toolRunner.arg('-gsp');
+    toolRunner.arg(googleServicesJsonPath);
+
+    toolRunner.arg('-p');
+    toolRunner.arg('ios');
+    toolRunner.arg(symbolPath);
+
+    const result = await toolRunner.exec();
     return result;
 }
 
@@ -150,10 +158,15 @@ async function custom() {
         throw new Error('Arguments are required.');
     }
 
-    const result = tl.execSync(executable, args);
+    // const result = tl.execSync(executable, args);
+    let toolRunner = tl.tool(executable);
 
-    if (result.code !== 0) {
-        throw new Error(result.stderr);
+    toolRunner.arg(args);
+
+    const result = await toolRunner.exec();
+
+    if (result !== 0) {
+        throw new Error("Firebase command failed.");
     }
 
     tl.setResult(tl.TaskResult.Succeeded, 'Firebase command succeeded.');
@@ -176,19 +189,18 @@ async function uploadFlutterDebugInfo() {
         }
 
         const executable = 'firebase';
-        const stringBuilder = new Array<string>();
 
-        stringBuilder.push('crashlytics:symbols:upload');
-        stringBuilder.push('--app');
-        stringBuilder.push(firebaseAppId);
-        stringBuilder.push(debugInfoPath);
+        let toolRunner = tl.tool(executable);
 
-        const args = stringBuilder.join(' ');
+        toolRunner.arg('crashlytics:symbols:upload');
+        toolRunner.arg('--app');
+        toolRunner.arg(firebaseAppId);
+        toolRunner.arg(debugInfoPath);
 
-        const result = tl.execSync(executable, args);
+        const result = await toolRunner.exec();
 
-        if (result.code !== 0) {
-            throw new Error(result.stderr);
+        if (result !== 0) {
+            throw new Error("Firebase debug info upload failed.");
         }
 
         tl.setResult(tl.TaskResult.Succeeded, 'Firebase debug info upload succeeded.');
