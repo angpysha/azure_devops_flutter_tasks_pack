@@ -113,32 +113,44 @@ async function run() {
         // // Create commnad for fastlane pilot upload
 
         // const executableName = 'fastlane';
-        const stringBuilder = new Array<string>();
+        // const stringBuilder = new Array<string>();
 
-        stringBuilder.push('pilot');
-        stringBuilder.push('upload');
+        // stringBuilder.push('pilot');
+        // stringBuilder.push('upload');
+
+        // if (teamId !== undefined && teamId !== '') {
+        //     stringBuilder.push('--team_id');
+        //     stringBuilder.push(teamId);
+        // }
+
+        // stringBuilder.push('--api_key_path');
+        // stringBuilder.push(generalKeyFilePath);
+        // stringBuilder.push('--ipa');
+        // stringBuilder.push(ipaPath);
+
+        let toolRunner = tl.tool(fastlane);
+
+        toolRunner.arg('pilot');
+        toolRunner.arg('upload');
 
         if (teamId !== undefined && teamId !== '') {
-            stringBuilder.push('--team_id');
-            stringBuilder.push(teamId);
+            toolRunner.arg('--team_id');
+            toolRunner.arg(teamId);
         }
 
-        stringBuilder.push('--api_key_path');
-        stringBuilder.push(generalKeyFilePath);
-        stringBuilder.push('--ipa');
-        stringBuilder.push(ipaPath);
+        toolRunner.arg('--api_key_path');
+        toolRunner.arg(generalKeyFilePath);
+
+        toolRunner.arg('--ipa');
+        toolRunner.arg(ipaPath);
 
         if (waitUntilBuildIsProcessed == false) {
-            stringBuilder.push('--skip_waiting_for_build_processing');
-            stringBuilder.push('true');
+            toolRunner.arg('--skip_waiting_for_build_processing');
+            toolRunner.arg('true');
         }
 
-        const command = stringBuilder.join(' ');
-
-        console.log(`Executing command: ${command}`);
-
         // // Execute command
-        const result = await tl.exec(fastlane, command);
+        const result = await toolRunner.exec();
 
         if (result !== 0) {
             throw new Error(`Command failed with exit code ${result}`);
@@ -185,22 +197,34 @@ async function authoriseFastlane(
             throw new Error(`Key file not found at ${keyFilePath}`);
         }
 
-        const stringBuilder = new Array<string>();
+        // const stringBuilder = new Array<string>();
 
-        stringBuilder.push('run');
-        stringBuilder.push('app_store_connect_api_key');
+        // stringBuilder.push('run');
+        // stringBuilder.push('app_store_connect_api_key');
 
-        stringBuilder.push(`key_id:${keyId}`);
-        stringBuilder.push(`issuer_id:${issuerId}`);
-        stringBuilder.push(`key_filepath:${keyFilePath}`);
-        stringBuilder.push(`duration:${duration}`);
-        stringBuilder.push(`in_house:${inHouse}`);
+        // stringBuilder.push(`key_id:${keyId}`);
+        // stringBuilder.push(`issuer_id:${issuerId}`);
+        // stringBuilder.push(`key_filepath:${keyFilePath}`);
+        // stringBuilder.push(`duration:${duration}`);
+        // stringBuilder.push(`in_house:${inHouse}`);
 
-        const command = stringBuilder.join(' ');
+        // const command = stringBuilder.join(' ');
 
-        console.log(`Executing command: ${command}`);
+        // console.log(`Executing command: ${command}`);
 
-        const result = await tl.exec(fastlane, command);
+        let toolRunner = tl.tool(fastlane);
+
+        toolRunner.arg('run');
+
+        toolRunner.arg('app_store_connect_api_key');
+
+        toolRunner.arg(`key_id:${keyId}`);
+        toolRunner.arg(`issuer_id:${issuerId}`);
+        toolRunner.arg(`key_filepath:${keyFilePath}`);
+        toolRunner.arg(`duration:${duration}`);
+        toolRunner.arg(`in_house:${inHouse}`);
+
+        const result = await toolRunner.exec();
 
         if (result !== 0) {
             throw new Error(`Command failed with exit code ${result}`);

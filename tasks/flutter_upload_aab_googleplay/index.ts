@@ -58,23 +58,19 @@ async function run() {
             console.log(`Start uploading AAB file: ${aabFile}`);
         }
 
-        const stringBuilder = new Array<string>();
+        let toolRunner = tl.tool(fastlane);
 
-        stringBuilder.push('supply');
-        stringBuilder.push('--aab');
-        stringBuilder.push(aabFile);
-        stringBuilder.push('--json_key');
-        stringBuilder.push(keystoreFile);
-        stringBuilder.push('--package_name');
-        stringBuilder.push(packageId);
-        stringBuilder.push('--track');
-        stringBuilder.push(trackValue);
+        toolRunner.arg('supply');
+        toolRunner.arg('--aab');
+        toolRunner.arg(aabFile);
+        toolRunner.arg('--json_key');
+        toolRunner.arg(keystoreFile);
+        toolRunner.arg('--package_name');
+        toolRunner.arg(packageId);
+        toolRunner.arg('--track');
+        toolRunner.arg(trackValue);
 
-        const command = stringBuilder.join(' ');
-
-        console.log(`Executing command: ${command}`);
-
-        const result = await tl.exec(fastlane, command);
+        const result = await toolRunner.exec();
 
         if (result !== 0) {
             throw new Error(`Command failed with exit code ${result}`);
