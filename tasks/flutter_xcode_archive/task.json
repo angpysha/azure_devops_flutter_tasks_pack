@@ -10,7 +10,7 @@
     "version": {
         "Major": 0,
         "Minor": 4,
-        "Patch": 0
+        "Patch": 1
     },
     "instanceNameFormat": "Xcode Archive for Flutter iOS",
     "inputs": [
@@ -49,6 +49,14 @@
         "defaultValue": "true",
         "required": true,
         "helpMarkDown": "Sign on archive"
+       },
+       {
+        "name": "manualSign",
+        "type": "boolean",
+        "label": "Manual sign",
+        "defaultValue": "false",
+        "required": true,
+        "helpMarkDown": "Manual sign"
        },
        {
         "name": "configuration",

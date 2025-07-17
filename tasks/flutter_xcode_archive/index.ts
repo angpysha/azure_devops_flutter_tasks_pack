@@ -16,6 +16,7 @@ async function archive() {
     const xcodeWorkspacePath = tl.getPathInput('workspace', true);
     const signIdentity = tl.getInput('signIdentity', false);
     const provisioningProfileUuid = tl.getInput('provisioningProfile', false);
+    const manualSign = tl.getBoolInput('manualSign', false);
 
     if (projectPath === undefined) {
         throw new Error('Project path is required');
@@ -41,11 +42,11 @@ async function archive() {
         throw new Error('Sign on archive is required');
     }
 
-    if (signIdentity === undefined && signOnArchive) {
+    if (signIdentity === undefined && signOnArchive && manualSign) {
         throw new Error('Sign identity is required');
     }
 
-    if (provisioningProfileUuid === undefined && signOnArchive) {
+    if (provisioningProfileUuid === undefined && signOnArchive && manualSign) {
         throw new Error('Provisioning profile is required');
     }
 
@@ -65,13 +66,11 @@ async function archive() {
     toolRunner.arg(archivePath);
 
     if (!signOnArchive) {
-        // CODE_SIGN_IDENTITY="" \
-        // CODE_SIGNING_REQUIRED=NO \
-        // CODE_SIGNING_ALLOWED=NO
+
         toolRunner.arg('CODE_SIGN_IDENTITY=""');
         toolRunner.arg('CODE_SIGNING_REQUIRED=NO');
         toolRunner.arg('CODE_SIGNING_ALLOWED=NO');
-    } else {
+    } else if (manualSign) {
         toolRunner.arg('CODE_SIGN_STYLE=Manual');
         toolRunner.arg(`CODE_SIGN_IDENTITY=${signIdentity}`);
         toolRunner.arg(`PROVISIONING_PROFILE=${provisioningProfileUuid}`);
