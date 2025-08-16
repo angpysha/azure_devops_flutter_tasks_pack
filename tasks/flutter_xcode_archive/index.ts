@@ -92,7 +92,7 @@ async function exportArchive() {
 
     const projectPath = tl.getPathInput('path', true);
     const archivePath = tl.getPathInput('archivePath', true);
-    const exportOptionsPath = tl.getPathInput('exportOptionsPath', true);
+    const exportOptionsPlist = tl.getPathInput('exportOptionsPlist', true);
     const exportPath = tl.getPathInput('exportPath', true);
 
     if (projectPath === undefined) {
@@ -103,7 +103,7 @@ async function exportArchive() {
         throw new Error('Archive path is required');
     }
 
-    if (exportOptionsPath === undefined) {
+    if (exportOptionsPlist === undefined) {
         throw new Error('Export options path is required');
     }
 
@@ -119,7 +119,7 @@ async function exportArchive() {
     toolRunner.arg(archivePath);
 
     toolRunner.arg('-exportOptionsPlist');
-    toolRunner.arg(exportOptionsPath);
+    toolRunner.arg(exportOptionsPlist);
 
     toolRunner.arg('-exportPath');
     toolRunner.arg(exportPath);
