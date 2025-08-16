@@ -1,0 +1,40 @@
+{
+    "$schema": "https://raw.githubusercontent.com/Microsoft/azure-pipelines-task-lib/master/tasks.schema.json",
+    "id": "db87ca1a-2e7b-43a4-b43f-62c0c29ab5b0",
+    "name": "get-xcode-build-dir",
+    "friendlyName": "Get Xcode Build Dir",
+    "description": "Get Xcode Build Dir",
+    "helpMarkDown": "",
+    "category": "Utility",
+    "author": "Andrii Petrovskyi",
+    "version": {
+        "Major": 0,
+        "Minor": 2,
+        "Patch": 0
+    },
+    "instanceNameFormat": "Set Environment Variable",
+    "inputs": [
+        {
+            "name": "projectName",
+            "type": "string",
+            "label": "Project Name",
+            "defaultValue": "Runner",
+            "helpMarkDown": "Name of the project in iOS (Runner, etc.)"
+        }
+    ],
+    "outputVariables": [
+        {
+            "name": "buildDir",
+            "description": "Path to the Xcode build directory"
+        },
+        {
+            "name": "swiftPackagesPath",
+            "description": "Path to the Swift Packages directory"
+        }
+    ],
+    "execution": {
+        "Node20_1": {
+            "target": "index.js"
+        }
+    }
+}

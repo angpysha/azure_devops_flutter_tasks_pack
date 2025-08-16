@@ -9,7 +9,7 @@
     "author": "Andrii Petrovskyi",
     "version": {
         "Major": 0,
-        "Minor": 5,
+        "Minor": 6,
         "Patch": 0
     },
     "instanceNameFormat": "Build Flutter Android app",
@@ -87,7 +87,7 @@
         }
     ],
     "execution": {
-        "Node16": {
+        "Node20_1": {
             "target": "index.js"
         }
     }

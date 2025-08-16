@@ -1,0 +1,44 @@
+{
+    "$schema": "https://raw.githubusercontent.com/Microsoft/azure-pipelines-task-lib/master/tasks.schema.json",
+    "id": "c095c03d-4e1f-4ca2-91e8-252dbb976627",
+    "name": "flutter-use-correct-env",
+    "friendlyName": "Flutter use correct env",
+    "description": "Use correct env for flutter. Keep only selected env file and remove others",
+    "helpMarkDown": "",
+    "category": "Utility",
+    "author": "Andrii Petrovskyi",
+    "version": {
+        "Major": 0,
+        "Minor": 1,
+        "Patch": 0
+    },
+    "instanceNameFormat": "Flutter use correct env",
+    "inputs": [
+        {
+            "name": "envFolderPath",
+            "type": "filePath",
+            "label": "Path to env folder with .env files",
+            "required": true,
+            "helpMarkDown": "Path to the project folder"
+        },
+        {
+            "name": "envName",	
+            "type": "string",
+            "label": "Env name",
+            "required": true,
+            "helpMarkDown": "Name of the env file to use"
+        },
+        {
+            "name": "pubspecPath",
+            "type": "filePath",
+            "label": "Path to pubspec.yaml file",
+            "required": true,
+            "helpMarkDown": "Path to the pubspec.yaml file"
+        }
+    ],
+    "execution": {
+        "Node20_1": {
+            "target": "index.js"
+        }
+    }
+}

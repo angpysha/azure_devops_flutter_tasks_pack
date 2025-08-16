@@ -2,7 +2,7 @@
     "manifestVersion": 1,
     "id": "flutter-build-help-tools",
     "name": "Flutter Build Help Tools",
-    "version": "0.15.2",
+    "version": "0.16.0",
     "publisher": "AndriiPetrovskyi",
     "targets": [
         {
@@ -52,6 +52,15 @@
         },
         {
             "path": "tasks/flutter_upload_aab_googleplay"
+        },
+        {
+            "path": "tasks/set_env_variable"
+        },
+        {
+            "path": "tasks/get_xcode_build_dir"
+        },
+        {
+            "path": "tasks/flutter_use_correct_env"
         }
     ],
     "contributions": [
@@ -173,6 +182,36 @@
             ],
             "properties": {
                 "name": "tasks/flutter_upload_aab_googleplay"
+            }
+        },
+        {
+            "id": "set-env-variable",
+            "type": "ms.vss-distributed-task.task",
+            "targets": [
+                "ms.vss-distributed-task.tasks"
+            ],
+            "properties": {
+                "name": "tasks/set_env_variable"
+            }
+        },
+        {
+            "id": "get-xcode-build-dir",
+            "type": "ms.vss-distributed-task.task",
+            "targets": [
+                "ms.vss-distributed-task.tasks"
+            ],
+            "properties": {
+                "name": "tasks/get_xcode_build_dir"
+            }
+        },
+        {
+            "id": "flutter-use-correct-env",
+            "type": "ms.vss-distributed-task.task",
+            "targets": [
+                "ms.vss-distributed-task.tasks"
+            ],
+            "properties": {
+                "name": "tasks/flutter_use_correct_env"
             }
         }
     ]

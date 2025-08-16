@@ -1,0 +1,37 @@
+{
+    "$schema": "https://raw.githubusercontent.com/Microsoft/azure-pipelines-task-lib/master/tasks.schema.json",
+    "id": "d3407186-7e87-4205-9a11-a1be67d31b0c",
+    "name": "set-env-variable",
+    "friendlyName": "Set Environment Variable",
+    "description": "Set Global Environment Variable",
+    "helpMarkDown": "",
+    "category": "Utility",
+    "author": "Andrii Petrovskyi",
+    "version": {
+        "Major": 0,
+        "Minor": 2,
+        "Patch": 0
+    },
+    "instanceNameFormat": "Set Environment Variable",
+    "inputs": [
+        {
+            "name": "name",
+            "type": "string",
+            "label": "Name",
+            "required": true,
+            "helpMarkDown": "Name of the environment variable"
+        },
+        {
+            "name": "value",
+            "type": "string",
+            "label": "Value",
+            "required": true,
+            "helpMarkDown": "Value of the environment variable"
+        }
+    ],
+    "execution": {
+        "Node20_1": {
+            "target": "index.js"
+        }
+    }
+}

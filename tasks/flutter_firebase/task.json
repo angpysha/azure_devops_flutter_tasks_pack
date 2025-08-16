@@ -9,7 +9,7 @@
     "author": "Andrii Petrovskyi",
     "version": {
         "Major": 0,
-        "Minor": 5,
+        "Minor": 6,
         "Patch": 0
     },
     "instanceNameFormat": "Upload Flutter app to Firebase",
@@ -122,7 +122,7 @@
 
     ],
     "execution": {
-        "Node16": {
+        "Node20_1": {
             "target": "index.js"
         }
     }

@@ -1,5 +1,5 @@
 {
-  "name": "flutter_use_correct_env",
+  "name": "get_xcode_build_dir",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
