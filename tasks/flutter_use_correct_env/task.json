@@ -10,7 +10,7 @@
     "version": {
         "Major": 0,
         "Minor": 1,
-        "Patch": 0
+        "Patch": 2
     },
     "instanceNameFormat": "Flutter use correct env",
     "inputs": [
@@ -22,11 +22,11 @@
             "helpMarkDown": "Path to the project folder"
         },
         {
-            "name": "envName",	
+            "name": "envNames",	
             "type": "string",
-            "label": "Env name",
+            "label": "Env names",
             "required": true,
-            "helpMarkDown": "Name of the env file to use"
+            "helpMarkDown": "Names of the env files to use. One name per line"
         },
         {
             "name": "pubspecPath",

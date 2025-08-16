@@ -8,15 +8,15 @@ const yaml = require('yaml');
 async function run() {
  try {
     const envFolderPath = tl.getPathInput('envFolderPath', true);
-    const envName = tl.getInput('envName', true);
+    const envNames = tl.getInput('envNames', true);
     const pubspecPath = tl.getPathInput('pubspecPath', true);
 
     if (envFolderPath === undefined) {
         throw new Error('Env folder path is required');
     }
 
-    if (envName === undefined) {
-        throw new Error('Env name is required');
+    if (envNames === undefined) {
+        throw new Error('Env names are required');
     }
     
     if (pubspecPath === undefined) {
@@ -30,13 +30,15 @@ async function run() {
     }
 
     // check if file for env exists. Should be .evv.$envName
-    const envFile = envFiles.find((file: string) => file.startsWith(`.env.${envName}`));
+    const envNamesArray = envNames.split(',');
 
-    if (envFile === undefined) {
-        throw new Error(`Env file for ${envName} not found in the env folder`);
+    const envFilesToUse = envFiles.filter((file: string) => envNamesArray.some((name: string) => file.startsWith(`.env.${name}`)));
+
+    if (envFilesToUse === undefined) {
+        throw new Error(`Env file for ${envNames} not found in the env folder`);
     }
 
-    console.log(`Env file for ${envName} found in the env folder ${envFile}`);
+    console.log(`Env file for ${envNames} found in the env folder ${envFilesToUse}`);
 
     // read pubspec.yaml file
     const pubspecContent = fs.readFileSync(pubspecPath, 'utf8');
@@ -44,12 +46,12 @@ async function run() {
     const assets: string[] = pubspec["flutter"]["assets"];
     // console.log(`flutter assets: ${assets}`);
     const anotherAssets = assets.filter((asset: string) => !asset.includes(`env`));
-    const envAsset = assets.find((asset: string) => asset.includes(`${envName}`));
+    const envAssets = envFilesToUse.map((file: string) => `assets/${file}`);
     // const envAssestsToNotInclude = assets.filter((asset: string) => asset.startsWith(`.env.`) && !asset.startsWith(`.env.${envName}`));
     console.log(`envAssestsToNotInclude: ${anotherAssets}`);
-    console.log(`envAsset: ${envAsset}`);
+    console.log(`envAsset: ${envAssets}`);
 
-    anotherAssets.push(envAsset!);
+    anotherAssets.push(...envAssets);
     pubspec["flutter"]["assets"] = anotherAssets;
     fs.writeFileSync(pubspecPath, yaml.stringify(pubspec));
 
