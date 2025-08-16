@@ -62,7 +62,8 @@ async function run() {
     }
 
     if (flavor !== undefined && flavor !== '') {
-        toolRunner.arg(`--flavor ${flavor}`);
+        toolRunner.arg('--flavor');
+        toolRunner.arg(flavor);
     }
 
     if (obfuscate) {    
