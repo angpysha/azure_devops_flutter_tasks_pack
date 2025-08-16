@@ -2,7 +2,7 @@
     "manifestVersion": 1,
     "id": "flutter-build-help-tools",
     "name": "Flutter Build Help Tools",
-    "version": "0.16.3",
+    "version": "0.16.4",
     "publisher": "AndriiPetrovskyi",
     "targets": [
         {

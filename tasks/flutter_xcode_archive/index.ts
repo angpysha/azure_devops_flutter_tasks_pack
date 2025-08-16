@@ -92,7 +92,7 @@ async function exportArchive() {
 
     const projectPath = tl.getPathInput('path', true);
     const archivePath = tl.getPathInput('archivePath', true);
-    const exportOptionsPlist = tl.getPathInput('exportOptionsPlist', true);
+    const exportOptionsPlist = tl.getTaskVariable('EXPORT_OPTIONS_PLIST_PATH', true);
     const exportPath = tl.getPathInput('exportPath', true);
 
     if (projectPath === undefined) {
