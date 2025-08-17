@@ -113,7 +113,7 @@ async function exportArchive() {
 
     let toolRunner = tl.tool('xcodebuild');
 
-    toolRunner.arg('exportArchive');
+    toolRunner.arg('-exportArchive');
 
     toolRunner.arg('-archivePath');
     toolRunner.arg(archivePath);
