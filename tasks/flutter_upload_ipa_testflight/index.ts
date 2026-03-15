@@ -12,7 +12,8 @@ async function run() {
         // Get keystore file path for signing
         var keystoreFile = tl.getTaskVariable('KEY_FILE_PATH_TESTFLIGHT');
 
-        const ipaPath = tl.getPathInput('ipaFile', true);
+        const ipaPath = tl.getPathInput('ipaFile', false);
+        const pkgPath = tl.getPathInput('pkgFile', false);
         const keyId = tl.getInput('keyId', true);
         const issuerId = tl.getInput('issuerId', true);
         const teamId = tl.getInput('teamId', false);
@@ -45,12 +46,16 @@ async function run() {
             console.log(`Start uploading ipa file: ${ipaPath}`);
         }
 
-        if (ipaPath === undefined) {
-            throw new Error('IPA file is required');
+        if (ipaPath === undefined && pkgPath === undefined) {
+            throw new Error('IPA or PKG file is required');
         }
 
-        if (!tl.exist(ipaPath)) {
+        if (ipaPath !== undefined && !tl.exist(ipaPath)) {
             throw new Error(`IPA file not found at ${ipaPath}`);
+        }
+
+        if (pkgPath !== undefined && !tl.exist(pkgPath)) {
+            throw new Error(`PKG file not found at ${pkgPath}`);
         }
 
         if (keystoreFile === undefined) {
@@ -141,8 +146,15 @@ async function run() {
         toolRunner.arg('--api_key_path');
         toolRunner.arg(generalKeyFilePath);
 
-        toolRunner.arg('--ipa');
-        toolRunner.arg(ipaPath);
+        if (ipaPath !== undefined) {
+            toolRunner.arg('--ipa');
+            toolRunner.arg(ipaPath);
+        }
+
+        if (pkgPath !== undefined) {
+            toolRunner.arg('--pkg');
+            toolRunner.arg(pkgPath);
+        }
 
         if (waitUntilBuildIsProcessed == false) {
             toolRunner.arg('--skip_waiting_for_build_processing');

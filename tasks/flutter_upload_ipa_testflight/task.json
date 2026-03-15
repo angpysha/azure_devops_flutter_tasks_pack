@@ -9,7 +9,7 @@
     "author": "Andrii Petrovskyi",
     "version": {
         "Major": 0,
-        "Minor": 4,
+        "Minor": 5,
         "Patch": 0
     },
     "instanceNameFormat": "Upload to TestFlight",
@@ -19,8 +19,16 @@
             "type": "filePath",
             "label": "IPA file",
             "defaultValue": "",
-            "required": true,
+            "required": false,
             "helpMarkDown": "Path to the IPA file to upload."
+        },
+        {
+            "name": "pkgFile",
+            "type": "filePath",
+            "label": "PKG file",
+            "defaultValue": "",
+            "required": false,
+            "helpMarkDown": "Path to the PKG file to upload."
         },
         {
             "name": "keyFile",
