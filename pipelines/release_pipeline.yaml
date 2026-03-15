@@ -40,4 +40,4 @@ jobs:
       fileType: 'vsix'
       vsixFile: '$(Agent.BuildDirectory)/build_pipeline/vsix/AzureDevOpsFlutterTasksPack.vsix'
       updateTasksVersion: false
-      extensionVisibility: 'private'
+      extensionVisibility: 'public'

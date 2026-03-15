@@ -16,7 +16,16 @@
     "icons": {
         "default": "ext_icon.png"        
     },
+    "content": {
+        "details": {
+            "path": "overview.md"
+        }
+    },
     "files": [
+        {
+            "path": "overview.md",
+            "addressable": true
+        },
         {
             "path": "tasks/flutter_build_android"
         },
