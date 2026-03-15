@@ -3,14 +3,14 @@
     "id": "ff24fe6c-0dac-4472-9ce0-ab552be369be",
     "name": "flutter-upload-testflight",
     "friendlyName": "Upload to TestFlight",
-    "description": "Upload AAB file to TestFlight using fastlane. Using command `fastlane pilot upload`.",
-    "helpMarkDown": "Upload fastlane to TestFlight. Required data for the task: IPA file, p8 key file, Key ID, Issuer ID, Team ID. p8 can be created in the Apple Developer Portal. Link to the Keys section: https://developer.apple.com/account/resources/authkeys/list. Link to the Membership section: https://developer.apple.com/account/#/membership",
+    "description": "Upload IPA/PKG file to TestFlight using fastlane. Using command `fastlane pilot upload`.",
+    "helpMarkDown": "Upload IPA or PKG to TestFlight using Fastlane. Required data for the task: IPA/PKG file, p8 key file, Key ID, Issuer ID, Team ID. p8 can be created in the Apple Developer Portal. Link to the Keys section: https://developer.apple.com/account/resources/authkeys/list. Link to the Membership section: https://developer.apple.com/account/#/membership",
     "category": "Utility",
     "author": "Andrii Petrovskyi",
     "version": {
         "Major": 0,
         "Minor": 5,
-        "Patch": 1
+        "Patch": 2
     },
     "instanceNameFormat": "Upload to TestFlight",
     "inputs": [

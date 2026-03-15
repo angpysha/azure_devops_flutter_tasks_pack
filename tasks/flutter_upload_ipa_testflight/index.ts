@@ -12,8 +12,8 @@ async function run() {
         // Get keystore file path for signing
         var keystoreFile = tl.getTaskVariable('KEY_FILE_PATH_TESTFLIGHT');
 
-        const ipaPath = tl.getPathInput('ipaFile', false);
-        const pkgPath = tl.getPathInput('pkgFile', false);
+        const ipaPathInput = tl.getPathInput('ipaFile', false);
+        const pkgPathInput = tl.getPathInput('pkgFile', false);
         const keyId = tl.getInput('keyId', true);
         const issuerId = tl.getInput('issuerId', true);
         const teamId = tl.getInput('teamId', false);
@@ -43,19 +43,14 @@ async function run() {
 
         if (verbose) {
             console.log('Verbose mode enabled');
-            console.log(`Start uploading ipa file: ${ipaPath}`);
+            console.log(`Start uploading to TestFlight. IPA input: ${ipaPathInput}, PKG input: ${pkgPathInput}`);
         }
+
+        const ipaPath = getValidatedArtifactPath(ipaPathInput, '.ipa', 'IPA');
+        const pkgPath = getValidatedArtifactPath(pkgPathInput, '.pkg', 'PKG');
 
         if (ipaPath === undefined && pkgPath === undefined) {
-            throw new Error('IPA or PKG file is required');
-        }
-
-        if (ipaPath !== undefined && !tl.exist(ipaPath)) {
-            throw new Error(`IPA file not found at ${ipaPath}`);
-        }
-
-        if (pkgPath !== undefined && !tl.exist(pkgPath)) {
-            throw new Error(`PKG file not found at ${pkgPath}`);
+            throw new Error('At least one valid artifact is required. Provide an existing .ipa file and/or .pkg file.');
         }
 
         if (keystoreFile === undefined) {
@@ -146,12 +141,12 @@ async function run() {
         toolRunner.arg('--api_key_path');
         toolRunner.arg(generalKeyFilePath);
 
-        if (ipaPath !== undefined) {
+        if (ipaPath) {
             toolRunner.arg('--ipa');
             toolRunner.arg(ipaPath);
         }
 
-        if (pkgPath !== undefined) {
+        if (pkgPath) {
             toolRunner.arg('--pkg');
             toolRunner.arg(pkgPath);
         }
@@ -183,6 +178,34 @@ async function removeGeneralKeyFile(generalKeyFilePath: string) {
     if (generalKeyFilePath !== undefined && tl.exist(generalKeyFilePath)) {
         fs.unlinkSync(generalKeyFilePath);
     }
+}
+
+function getValidatedArtifactPath(
+    artifactPath: string | undefined,
+    expectedExtension: string,
+    artifactName: string
+): string | undefined {
+    if (artifactPath === undefined || artifactPath.trim() === '') {
+        return undefined;
+    }
+
+    if (!tl.exist(artifactPath)) {
+        tl.warning(`${artifactName} input path does not exist and will be ignored: ${artifactPath}`);
+        return undefined;
+    }
+
+    const pathStats = fs.statSync(artifactPath);
+    if (!pathStats.isFile()) {
+        tl.warning(`${artifactName} input path is not a file and will be ignored: ${artifactPath}`);
+        return undefined;
+    }
+
+    if (path.extname(artifactPath).toLowerCase() !== expectedExtension) {
+        tl.warning(`${artifactName} input path must end with ${expectedExtension} and will be ignored: ${artifactPath}`);
+        return undefined;
+    }
+
+    return artifactPath;
 }
 
 async function authoriseFastlane(
