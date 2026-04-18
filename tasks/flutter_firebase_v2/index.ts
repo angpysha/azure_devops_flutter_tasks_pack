@@ -2,9 +2,38 @@ import tl = require('azure-pipelines-task-lib/task');
 import tr = require('azure-pipelines-task-lib/toolrunner');
 import { async } from 'q';
 import * as fs from 'fs';
+import * as path from 'path';
 import * as secureFilesCommon from 'azure-pipelines-tasks-securefiles-common/securefiles-common';
 
-type FlutterFirebaseTaskType = 'distribute' | 'uploadIOSSymbols' | 'uploadFlutterDebugInfo' | 'custom';
+/** Reads GCP service account JSON from the custom certificate-based service connection. */
+function readServiceAccountJsonFromServiceConnection(serviceConnection: string): string {
+    let jsonContent = tl.getEndpointAuthorizationParameter(serviceConnection, 'certificate', false);
+    if (!jsonContent || jsonContent.trim() === '') {
+        const auth = tl.getEndpointAuthorization(serviceConnection, false);
+        if (auth?.parameters) {
+            const parameters = auth.parameters as Record<string, string>;
+            jsonContent =
+                parameters['certificate'] ||
+                parameters['Certificate'] ||
+                '';
+        }
+    }
+    if (!jsonContent || jsonContent.trim() === '') {
+        throw new Error('Service connection does not contain service account JSON (certificate field).');
+    }
+    return jsonContent;
+}
+
+/** Writes JSON to a private temp file for GOOGLE_APPLICATION_CREDENTIALS. */
+function writeServiceAccountCredentialsFile(jsonContent: string): string {
+    const agentTemp = tl.getVariable('Agent.TempDirectory');
+    if (!agentTemp) {
+        throw new Error('Agent.TempDirectory is not set; cannot write credentials file.');
+    }
+    const credPath = path.join(agentTemp, `flutter-firebase-gcp-sa-${process.pid}-${Date.now()}.json`);
+    fs.writeFileSync(credPath, jsonContent, { encoding: 'utf8', mode: 0o600 });
+    return credPath;
+}
 const cancelMessage = 'Task was canceled by user request.';
 let cancellationRequested = false;
 let activeToolRunner: any;
@@ -228,21 +257,15 @@ async function run() {
             throw new Error('Task type is required');
         }
 
-        let typeEnum: FlutterFirebaseTaskType = type as FlutterFirebaseTaskType;
-
         if (type !== 'uploadIOSSymbols' && type !== 'uploadFlutterDebugInfo') {
-            const keystoreFileId = tl.getInput('credentials', true);
+            const serviceConnection = tl.getInput('firebaseServiceConnection', true);
 
-            if (keystoreFileId === undefined) {
-                throw new Error('Google service account credentials JSON is required.');
+            if (serviceConnection === undefined || serviceConnection === '') {
+                throw new Error('Google service account service connection is required.');
             }
 
-            const secureFileHelpers: secureFilesCommon.SecureFileHelpers = new secureFilesCommon.SecureFileHelpers(8);
-            googleAccountCredentialsPath = await secureFileHelpers.downloadSecureFile(keystoreFileId);
-
-            if (googleAccountCredentialsPath === undefined) {
-                throw new Error('Failed to download Google service account credentials JSON.');
-            }
+            const jsonContent = readServiceAccountJsonFromServiceConnection(serviceConnection);
+            googleAccountCredentialsPath = writeServiceAccountCredentialsFile(jsonContent);
 
             if (fs.existsSync(googleAccountCredentialsPath)) {
                 // This way is recommended by Google instead using legacy --token

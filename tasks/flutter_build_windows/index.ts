@@ -2,8 +2,14 @@ import tl = require('azure-pipelines-task-lib/task');
 import tr = require('azure-pipelines-task-lib/toolrunner');
 import { async } from 'q';
 
+const cancelMessage = 'Task was canceled by user request.';
+let cancellationRequested = false;
+let activeToolRunner: any;
+
 async function run() {
  try {
+    registerCancellationHandler();
+
     const projectPath = tl.getPathInput('path', true);
     const useRelease = tl.getBoolInput('isRelease', true);
     const flavor = tl.getInput('buildFlavor', false);
@@ -12,30 +18,34 @@ async function run() {
         throw new Error('Project path is required');
     }
 
-    const stringBuilder = new Array<string>();
-
-    stringBuilder.push('build');
-
-
-    if (useRelease) {
-        stringBuilder.push('--release');
-    }
-
     if (flavor !== undefined && flavor !== '') {
-        stringBuilder.push(`--flavor ${flavor}`);
         tl.setVariable('FLAVOR', flavor);
         tl.setVariable('BUILD_CONFIGURATION', useRelease ? 'Release' : 'Debug')
     }
-
-    const command = stringBuilder.join(' ');
-
-    console.log(`Running: ${command}`);
 
     let options = <tr.IExecOptions>{
         cwd: projectPath
     };
 
-    const result = await tl.exec('flutter', command, options);
+    let toolRunner = tl.tool('flutter');
+    toolRunner.arg('build');
+
+    if (useRelease) {
+        toolRunner.arg('--release');
+    }
+
+    if (flavor !== undefined && flavor !== '') {
+        toolRunner.arg('--flavor');
+        toolRunner.arg(flavor);
+    }
+
+    activeToolRunner = toolRunner;
+    const result = await toolRunner.exec(options);
+    activeToolRunner = undefined;
+
+    if (cancellationRequested) {
+        throw new Error(cancelMessage);
+    }
 
     if (result !== 0) {
         throw new Error('Flutter build failed');
@@ -44,8 +54,31 @@ async function run() {
     tl.setResult(tl.TaskResult.Succeeded, 'Flutter build completed');
 
  } catch (err: any) {
+  if (cancellationRequested) {
+    tl.setResult(tl.TaskResult.Canceled, cancelMessage);
+    return;
+  }
+
   tl.setResult(tl.TaskResult.Failed, err.message);
  }
+}
+
+function registerCancellationHandler() {
+    const cancellationHandler = (signal: string) => {
+        if (cancellationRequested) {
+            return;
+        }
+
+        cancellationRequested = true;
+        tl.warning(`Cancellation signal received (${signal}). Stopping active process...`);
+
+        if (activeToolRunner && typeof activeToolRunner.killChildProcess === 'function') {
+            activeToolRunner.killChildProcess();
+        }
+    };
+
+    process.once('SIGINT', () => cancellationHandler('SIGINT'));
+    process.once('SIGTERM', () => cancellationHandler('SIGTERM'));
 }
 
 run();

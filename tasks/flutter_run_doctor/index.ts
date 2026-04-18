@@ -1,21 +1,29 @@
 import tl = require('azure-pipelines-task-lib/task');
 import { async } from 'q';
 
+const cancelMessage = 'Task was canceled by user request.';
+let cancellationRequested = false;
+let activeToolRunner: any;
+
 async function run() {  
     try {
+        registerCancellationHandler();
+
         const useVerbose = tl.getBoolInput('verbose', false);
 
-        const stringBuilder = new Array<string>();
-
-        stringBuilder.push('doctor');
-
+        let toolRunner = tl.tool('flutter');
+        toolRunner.arg('doctor');
         if (useVerbose) {
-            stringBuilder.push('-v');
+            toolRunner.arg('-v');
         }
 
-        const args = stringBuilder.join(' ');
+        activeToolRunner = toolRunner;
+        let number = await toolRunner.exec();
+        activeToolRunner = undefined;
 
-        let number = await tl.exec('flutter', args);
+        if (cancellationRequested) {
+            throw new Error(cancelMessage);
+        }
 
         if (number !== 0) {
             throw new Error('Flutter doctor failed');
@@ -23,8 +31,31 @@ async function run() {
 
         tl.setResult(tl.TaskResult.Succeeded, 'Flutter doctor completed');
     } catch (err: any) {
+        if (cancellationRequested) {
+            tl.setResult(tl.TaskResult.Canceled, cancelMessage);
+            return;
+        }
+
         tl.setResult(tl.TaskResult.Failed, err.message);
     }
+}
+
+function registerCancellationHandler() {
+    const cancellationHandler = (signal: string) => {
+        if (cancellationRequested) {
+            return;
+        }
+
+        cancellationRequested = true;
+        tl.warning(`Cancellation signal received (${signal}). Stopping active process...`);
+
+        if (activeToolRunner && typeof activeToolRunner.killChildProcess === 'function') {
+            activeToolRunner.killChildProcess();
+        }
+    };
+
+    process.once('SIGINT', () => cancellationHandler('SIGINT'));
+    process.once('SIGTERM', () => cancellationHandler('SIGTERM'));
 }
 
 run();

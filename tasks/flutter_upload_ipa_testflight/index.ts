@@ -6,9 +6,15 @@ import * as path from 'path';
 
 const fastlane = 'fastlane';
 const generalKeyFilePath = path.join(__dirname, 'key.json');
+const cancelMessage = 'Task was canceled by user request.';
+let cancellationRequested = false;
+let forceExitTimer: NodeJS.Timeout | undefined;
+let activeToolRunner: any;
 
 async function run() {
     try {
+        registerCancellationHandler();
+
         // Get keystore file path for signing
         var keystoreFile = tl.getTaskVariable('KEY_FILE_PATH_TESTFLIGHT');
 
@@ -129,6 +135,7 @@ async function run() {
         // stringBuilder.push(ipaPath);
 
         let toolRunner = tl.tool(fastlane);
+        activeToolRunner = toolRunner;
 
         toolRunner.arg('pilot');
         toolRunner.arg('upload');
@@ -158,6 +165,11 @@ async function run() {
 
         // // Execute command
         const result = await toolRunner.exec();
+        activeToolRunner = undefined;
+
+        if (cancellationRequested) {
+            throw new Error(cancelMessage);
+        }
 
         if (result !== 0) {
             throw new Error(`Command failed with exit code ${result}`);
@@ -167,16 +179,61 @@ async function run() {
         tl.setResult(tl.TaskResult.Succeeded, 'IPA uploaded successfully');
 
     } catch (err: any) {
+        if (cancellationRequested) {
+            tl.setResult(tl.TaskResult.Canceled, cancelMessage);
+            return;
+        }
+
         tl.setResult(tl.TaskResult.Failed, err.message);
     } finally {
+        clearForceExitTimer();
         // Remove general key file
-        await removeGeneralKeyFile(generalKeyFilePath);
+        removeGeneralKeyFile(generalKeyFilePath);
     }
 }
 
-async function removeGeneralKeyFile(generalKeyFilePath: string) {
+function removeGeneralKeyFile(generalKeyFilePath: string) {
     if (generalKeyFilePath !== undefined && tl.exist(generalKeyFilePath)) {
         fs.unlinkSync(generalKeyFilePath);
+    }
+}
+
+function registerCancellationHandler() {
+    const cancellationHandler = (signal: string) => {
+        if (cancellationRequested) {
+            return;
+        }
+
+        cancellationRequested = true;
+        tl.warning(`Cancellation signal received (${signal}). Stopping fastlane process...`);
+
+        try {
+            if (activeToolRunner && typeof activeToolRunner.killChildProcess === 'function') {
+                activeToolRunner.killChildProcess();
+            }
+        } catch (err) {
+            tl.warning(`Unable to stop child process gracefully: ${err}`);
+        }
+
+        // Safety net: force process termination if child process does not stop quickly.
+        forceExitTimer = setTimeout(() => {
+            try {
+                removeGeneralKeyFile(generalKeyFilePath);
+                tl.setResult(tl.TaskResult.Canceled, cancelMessage);
+            } finally {
+                process.exit(1);
+            }
+        }, 5000);
+    };
+
+    process.once('SIGINT', () => cancellationHandler('SIGINT'));
+    process.once('SIGTERM', () => cancellationHandler('SIGTERM'));
+}
+
+function clearForceExitTimer() {
+    if (forceExitTimer) {
+        clearTimeout(forceExitTimer);
+        forceExitTimer = undefined;
     }
 }
 

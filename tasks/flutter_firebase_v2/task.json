@@ -1,18 +1,18 @@
 {
     "$schema": "https://raw.githubusercontent.com/Microsoft/azure-pipelines-task-lib/master/tasks.schema.json",
-    "id": "746acee1-7dd3-44ea-bcd2-1a181207715a",
-    "name": "flutter-firebase",
-    "friendlyName": "Upload Flutter app to Firebase",
-    "description": "Upload Flutter app to Firebase distribution",
+    "id": "b4e9c1d2-8a3f-4e5b-9c7d-1a2b3c4d5e6f",
+    "name": "flutter-firebase-v2",
+    "friendlyName": "Upload Flutter app to Firebase V2",
+    "description": "Upload Flutter app to Firebase distribution using a GCP service account service connection",
     "helpMarkDown": "",
     "category": "Utility",
     "author": "Andrii Petrovskyi",
     "version": {
         "Major": 0,
-        "Minor": 6,
-        "Patch": 1
+        "Minor": 1,
+        "Patch": 0
     },
-    "instanceNameFormat": "Upload Flutter app to Firebase",
+    "instanceNameFormat": "Upload Flutter app to Firebase V2",
     "inputs": [
         {
             "name" : "type",
@@ -69,12 +69,12 @@
             "visibleRule": "type = other"
         },
         {
-            "name": "credentials",
-            "type": "secureFile",
-            "label": "Google service account credentials",
+            "name": "firebaseServiceConnection",
+            "type": "connectedService:flutter-firebase-gcp-sa",
+            "label": "GCP service account (service connection)",
             "required": true,
             "visibleRule": "type = distribute || type = custom",
-            "helpMarkDown": "Google service account credentials"
+            "helpMarkDown": "Service connection storing the full Google Cloud service account JSON key (same content as the secure file in the V1 task)."
         },
         {
             "name": "nointeractive",

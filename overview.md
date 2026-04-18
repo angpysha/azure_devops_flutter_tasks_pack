@@ -24,7 +24,8 @@ Flutter Build Help Tools is an Azure DevOps extension with ready-to-use pipeline
 - Flutter Re-sign IPA
 - Flutter Upload IPA to TestFlight
 - Flutter Upload AAB to Google Play
-- Flutter Firebase
+- Flutter Firebase (secure file for GCP key)
+- Flutter Firebase V2 (GCP key via service connection)
 - Flutter Doctor
 - Flutter Melos
 - Replace Build Number
@@ -35,4 +36,4 @@ Flutter Build Help Tools is an Azure DevOps extension with ready-to-use pipeline
 
 ## Support
 
-For setup guidance and examples, check the repository documentation at `docs/index.md` and task descriptions in this extension.
+For setup guidance and examples, see the repository: `docs/index.md` (overview and links) and **`docs/tasks/`** (one how-to guide per task, including Firebase V2 and the GCP service connection).

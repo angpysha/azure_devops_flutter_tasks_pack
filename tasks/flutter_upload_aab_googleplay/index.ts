@@ -5,10 +5,16 @@ import * as path from 'path';
 
 const fastlane = 'fastlane';
 type trackValueType = 'production' | 'beta' | 'alpha' | 'internal';
+const cancelMessage = 'Task was canceled by user request.';
+let cancellationRequested = false;
+let forceExitTimer: NodeJS.Timeout | undefined;
+let activeToolRunner: any;
 
 
 async function run() {
     try {
+        registerCancellationHandler();
+
         // Get keystore file path for signing
         var keystoreFile = tl.getTaskVariable('KEY_FILE_PATH_GOOGLEPLAY');
 
@@ -59,6 +65,7 @@ async function run() {
         }
 
         let toolRunner = tl.tool(fastlane);
+        activeToolRunner = toolRunner;
 
         toolRunner.arg('supply');
         toolRunner.arg('--aab');
@@ -71,6 +78,11 @@ async function run() {
         toolRunner.arg(trackValue);
 
         const result = await toolRunner.exec();
+        activeToolRunner = undefined;
+
+        if (cancellationRequested) {
+            throw new Error(cancelMessage);
+        }
 
         if (result !== 0) {
             throw new Error(`Command failed with exit code ${result}`);
@@ -78,7 +90,52 @@ async function run() {
 
         tl.setResult(tl.TaskResult.Succeeded, 'AAB uploaded successfully');
     } catch (err: any) {
+        if (cancellationRequested) {
+            tl.setResult(tl.TaskResult.Canceled, cancelMessage);
+            return;
+        }
+
         tl.setResult(tl.TaskResult.Failed, err.message);
+    } finally {
+        clearForceExitTimer();
+    }
+}
+
+function registerCancellationHandler() {
+    const cancellationHandler = (signal: string) => {
+        if (cancellationRequested) {
+            return;
+        }
+
+        cancellationRequested = true;
+        tl.warning(`Cancellation signal received (${signal}). Stopping fastlane process...`);
+
+        try {
+            if (activeToolRunner && typeof activeToolRunner.killChildProcess === 'function') {
+                activeToolRunner.killChildProcess();
+            }
+        } catch (err) {
+            tl.warning(`Unable to stop child process gracefully: ${err}`);
+        }
+
+        // Safety net: force process termination if child process does not stop quickly.
+        forceExitTimer = setTimeout(() => {
+            try {
+                tl.setResult(tl.TaskResult.Canceled, cancelMessage);
+            } finally {
+                process.exit(1);
+            }
+        }, 5000);
+    };
+
+    process.once('SIGINT', () => cancellationHandler('SIGINT'));
+    process.once('SIGTERM', () => cancellationHandler('SIGTERM'));
+}
+
+function clearForceExitTimer() {
+    if (forceExitTimer) {
+        clearTimeout(forceExitTimer);
+        forceExitTimer = undefined;
     }
 }
 
