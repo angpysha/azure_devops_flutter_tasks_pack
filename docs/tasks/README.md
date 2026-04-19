@@ -11,6 +11,7 @@ Each file describes one packaged pipeline task (or the Firebase GCP service conn
 | [flutter-run-doctor.md](flutter-run-doctor.md) | Run flutter doctor |
 | [flutter-sign-aab.md](flutter-sign-aab.md) | Sign AAB |
 | [flutter-replace-build-number.md](flutter-replace-build-number.md) | Replace build number |
+| [flutter-update-ios-xcode-versions.md](flutter-update-ios-xcode-versions.md) | Update iOS Xcode marketing and build version |
 | [flutter-xcode-archive-ios.md](flutter-xcode-archive-ios.md) | Xcode Archive for Flutter iOS |
 | [flutter-resign-ipa.md](flutter-resign-ipa.md) | Resign Flutter iOS app |
 | [flutter-firebase.md](flutter-firebase.md) | Upload Flutter app to Firebase |

@@ -8,7 +8,7 @@ Flutter Build Help Tools is an Azure DevOps extension with ready-to-use pipeline
 - Run Flutter environment checks and workspace tooling commands.
 - Archive, re-sign, and upload iOS IPA files to TestFlight.
 - Upload Android AAB files to Google Play.
-- Manage build metadata and pipeline environment variables.
+- Manage build metadata, `pubspec.yaml` / Xcode `project.pbxproj` version fields, and pipeline environment variables.
 
 ## Typical use cases
 
@@ -29,6 +29,7 @@ Flutter Build Help Tools is an Azure DevOps extension with ready-to-use pipeline
 - Flutter Doctor
 - Flutter Melos
 - Replace Build Number
+- Update iOS Xcode marketing and build version (`project.pbxproj`)
 - Check Path
 - Set Environment Variable
 - Get Xcode Build Directory

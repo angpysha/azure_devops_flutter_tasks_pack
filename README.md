@@ -2,7 +2,7 @@
 
 [![Flutter](https://img.shields.io/badge/Flutter-blue?logo=flutter)](https://github.com/flutter/flutter)
 
-Collection of Azure DevOps pipeline tasks for **Flutter** CI/CD: Android/iOS builds, signing, Xcode archive, Firebase App Distribution, TestFlight, Google Play, and small utilities (env files, build numbers, path checks).
+Collection of Azure DevOps pipeline tasks for **Flutter** CI/CD: Android/iOS builds, signing, Xcode archive, `project.pbxproj` version updates, Firebase App Distribution, TestFlight, Google Play, and small utilities (env files, `pubspec.yaml` build numbers, path checks).
 
 ## Quick start
 

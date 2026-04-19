@@ -16,7 +16,7 @@ Azure DevOps Flutter Tasks Pack provides reusable pipeline tasks to build, sign,
 ## Typical pipeline flow
 
 1. Prepare Flutter environment (optionally **Run flutter doctor**).
-2. Build Android (`APK` or `AAB`) and/or iOS (`IPA`) artifacts.
+2. Build Android (`APK` or `AAB`) and/or iOS (`IPA`) artifacts (update **pubspec.yaml** or **`project.pbxproj`** versions earlier in the job if needed).
 3. Sign or re-sign release artifacts when needed.
 4. Upload builds to Firebase App Distribution, TestFlight, or Google Play.
 
@@ -31,6 +31,7 @@ Azure DevOps Flutter Tasks Pack provides reusable pipeline tasks to build, sign,
 | Run flutter doctor | Validates Flutter environment and prints diagnostics. | [flutter-run-doctor.md](tasks/flutter-run-doctor.md) |
 | Sign AAB | Signs Android AAB using `jarsigner`. | [flutter-sign-aab.md](tasks/flutter-sign-aab.md) |
 | Replace build number | Updates `pubspec.yaml` build number. | [flutter-replace-build-number.md](tasks/flutter-replace-build-number.md) |
+| Update iOS Xcode marketing and build version | Updates `MARKETING_VERSION` / `CURRENT_PROJECT_VERSION` in `project.pbxproj`. | [flutter-update-ios-xcode-versions.md](tasks/flutter-update-ios-xcode-versions.md) |
 | Xcode Archive for Flutter iOS | Archives iOS app with Xcode and exports output. | [flutter-xcode-archive-ios.md](tasks/flutter-xcode-archive-ios.md) |
 | Resign Flutter iOS app | Re-signs an IPA with a new provisioning profile. | [flutter-resign-ipa.md](tasks/flutter-resign-ipa.md) |
 | Upload Flutter app to Firebase | Firebase CLI: App Distribution, symbols, Crashlytics, custom (GCP key via **secure file**). | [flutter-firebase.md](tasks/flutter-firebase.md) |

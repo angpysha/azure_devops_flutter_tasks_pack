@@ -2,7 +2,7 @@
     "manifestVersion": 1,
     "id": "flutter-build-help-tools",
     "name": "Flutter Build Help Tools",
-    "version": "0.20.0",
+    "version": "0.20.1",
     "publisher": "AndriiPetrovskyi",
     "targets": [
         {
@@ -73,6 +73,9 @@
         },
         {
             "path": "tasks/flutter_use_correct_env"
+        },
+        {
+            "path": "tasks/flutter_update_ios_xcode_versions"
         }
     ],
     "contributions": [
@@ -270,6 +273,16 @@
             ],
             "properties": {
                 "name": "tasks/flutter_use_correct_env"
+            }
+        },
+        {
+            "id": "flutter-update-ios-xcode-versions",
+            "type": "ms.vss-distributed-task.task",
+            "targets": [
+                "ms.vss-distributed-task.tasks"
+            ],
+            "properties": {
+                "name": "tasks/flutter_update_ios_xcode_versions"
             }
         }
     ]
