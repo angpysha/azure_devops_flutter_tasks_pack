@@ -1,35 +1,16 @@
+
 {
   "pipeline_version": "1",
-  "catalog_version": "",
-  "status": "needs_adapt",
+  "catalog_version": "0.8.0",
+  "status": "ready",
   "host": "cursor",
   "catalog_home": ".agents/pipeline.home",
   "recommendation": ".agents/pipeline.recommendation.json",
-  "project": {
-    "name": "azure_devops_flutter_tasks_pack",
-    "brief": "PROJECT.md",
-    "default_lane": "full"
-  },
-  "tracker": { "type": "beads", "prefix": "task" },
-  "pr": {
-    "type": "manual",
-    "org": "",
-    "project": "",
-    "repo": "",
-    "target_branch": "main",
-    "branch_prefix": { "feature": "feature/", "fix": "fix/", "chore": "chore/" }
-  },
-  "build": { "command": "" },
-  "test": {
-    "command": "",
-    "filter": "",
-    "results": {
-      "directory": "TestResults",
-      "trx": "TestResults/test-results.trx",
-      "cobertura": "TestResults/coverage/cobertura.xml",
-      "summary": "TestResults/azure-devops-results.json"
-    }
-  },
+  "project": { "name": "azure_devops_flutter_tasks_pack", "brief": "PROJECT.md", "default_lane": "full" },
+  "tracker": { "type": "github", "prefix": "task" },
+  "pr": { "type": "github", "org": "angpysha", "project": "", "repo": "azure_devops_flutter_tasks_pack", "target_branch": "main", "branch_prefix": { "feature": "feature/", "fix": "fix/", "chore": "chore/" } },
+  "build": { "command": "npm run install_packages && npm run compile_tasks" },
+  "test": { "command": "echo 'No unit tests configured — compile_tasks + VSIX packaging validated in CI'" },
   "format": { "command": "" },
   "dotgraph": { "toolVersion": "0.3.0", "snapshot": ".dotgraph.json" },
   "artifacts": {
@@ -55,27 +36,24 @@
     "test": ".cursor/skills/sdlc-orchestrator/scripts/run-test-gate.ps1"
   },
   "checkpoints": { "dir": "_code_agent" },
-  "packs": [],
+  "packs": ["node-typescript"],
   "packs_extra": [],
-  "agents": [],
+  "agents": ["coordinator", "ba-analyst", "architect", "team-lead", "developer", "tester", "devops", "security-reviewer", "tech-writer"],
   "agents_extra": [],
   "agents_disable": [],
   "features": {},
   "code_search": {
     "primary": "mcp-codebase-search",
-    "codebase_name": "",
+    "codebase_name": "azure_devops_flutter_tasks_pack",
     "graphify_out": "graphify-out"
   },
   "graphify": { "out": "graphify-out" },
   "spec_kit": {
     "enabled": true,
-    "integration": "cursor",
+    "integration": "cursor-agent",
     "dir": ".specify",
     "specs_dir": "specs",
     "constitution": ".specify/memory/constitution.md"
   },
-  "adapt": {
-    "last_run": "",
-    "catalog_version": ""
-  }
+  "adapt": { "last_run": "2026-07-03T20:43:00Z", "catalog_version": "0.8.0" }
 }

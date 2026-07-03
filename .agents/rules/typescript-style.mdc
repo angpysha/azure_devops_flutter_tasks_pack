@@ -1,0 +1,19 @@
+---
+description: TypeScript / Node code style
+globs: ["src/**/*.ts", "src/**/*.tsx", "test/**/*.ts"]
+alwaysApply: false
+---
+
+# TypeScript Code Style
+
+- `strict` mode on; no implicit `any`; prefer `unknown` over `any`.
+- Prefer `type`/`interface` over loose objects; readonly where possible.
+- Pure functions and small modules; explicit return types on public APIs.
+- ESLint + Prettier; build clean (no TS errors, no lint errors).
+- Async/await over raw promises; handle rejections.
+- Comments in English; explain intent, not mechanics.
+
+## Testing
+
+- Vitest/Jest; unit tests for logic, integration tests for I/O boundaries.
+- Cover happy path, edge cases, and error paths from acceptance criteria.

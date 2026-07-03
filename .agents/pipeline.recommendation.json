@@ -1,0 +1,45 @@
+{
+  "project_brief": "PROJECT.md",
+  "code_search_source": "filesystem",
+  "detected_signals": [
+    "PROJECT.md: TypeScript, Node.js, Azure DevOps extension, Flutter CI/CD",
+    "filesystem: package.json + typescript devDependency at repo root",
+    "filesystem: 18 tasks/*/package.json + tsconfig.json",
+    "filesystem: vss-extension.json, tfx-cli VSIX packaging",
+    "filesystem: .github/workflows/ci.yml, publish-marketplace.yml",
+    "filesystem: pipelines/build_pipeline.yaml, release_pipeline.yaml",
+    "filesystem: secure files / service connections in Firebase, TestFlight, signing tasks"
+  ],
+  "packs": [
+    { "name": "node-typescript", "score": 0.94, "features": [] }
+  ],
+  "agents": [
+    { "name": "coordinator", "enabled": true },
+    { "name": "ba-analyst", "enabled": true },
+    { "name": "architect", "enabled": true },
+    { "name": "team-lead", "enabled": true },
+    { "name": "developer", "enabled": true },
+    { "name": "tester", "enabled": true },
+    { "name": "devops", "enabled": true },
+    { "name": "security-reviewer", "enabled": true },
+    { "name": "tech-writer", "enabled": true }
+  ],
+  "tracker": { "type": "github", "prefix": "issue" },
+  "pr": {
+    "type": "github",
+    "org": "angpysha",
+    "project": "",
+    "repo": "azure_devops_flutter_tasks_pack",
+    "target_branch": "main"
+  },
+  "host": "cursor",
+  "build": {
+    "command": "npm run install_packages && npm run compile_tasks"
+  },
+  "test": {
+    "command": "echo 'No unit tests configured — compile_tasks + VSIX packaging validated in CI'"
+  },
+  "format": { "command": "" },
+  "spec_kit": { "enabled": true, "integration": "cursor" },
+  "confidence": "high"
+}
