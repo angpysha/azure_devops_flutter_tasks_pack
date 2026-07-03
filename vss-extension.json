@@ -13,6 +13,7 @@
     "categories": [
         "Azure Pipelines"
     ],
+    "public": true,
     "icons": {
         "default": "ext_icon.png"        
     },

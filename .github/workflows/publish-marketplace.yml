@@ -4,9 +4,9 @@ name: Publish to Azure Marketplace
 #   AZURE_DEVOPS_EXT_PAT — Personal Access Token with "Marketplace (publish)" scope
 #     Create at: https://dev.azure.com/{org}/_usersSettings/tokens
 #
-# Optional secrets:
-#   AZDO_SHARE_WITH — Azure DevOps organization name(s) to share the extension with
-#     (comma-separated). Leave unset for a public extension with no extra sharing.
+# This extension is public on the Marketplace. Do not set AZDO_SHARE_WITH — sharing
+# with orgs implies a private extension and fails with:
+# "An extension that was made public can't be changed to private."
 
 on:
   workflow_dispatch:
@@ -57,7 +57,6 @@ jobs:
       - name: Publish to Visual Studio Marketplace
         env:
           AZURE_DEVOPS_EXT_PAT: ${{ secrets.AZURE_DEVOPS_EXT_PAT }}
-          AZDO_SHARE_WITH: ${{ secrets.AZDO_SHARE_WITH }}
         run: |
           VSIX_FILE="$(find vsix_output -maxdepth 1 -name '*.vsix' -print -quit)"
           if [ -z "$VSIX_FILE" ]; then
@@ -70,16 +69,8 @@ jobs:
             exit 1
           fi
 
-          PUBLISH_ARGS=(
-            extension publish
-            --publisher AndriiPetrovskyi
-            --vsix "$VSIX_FILE"
-            --auth-type pat
+          tfx extension publish \
+            --publisher AndriiPetrovskyi \
+            --vsix "$VSIX_FILE" \
+            --auth-type pat \
             --token "$AZURE_DEVOPS_EXT_PAT"
-          )
-
-          if [ -n "$AZDO_SHARE_WITH" ]; then
-            PUBLISH_ARGS+=(--share-with "$AZDO_SHARE_WITH")
-          fi
-
-          tfx "${PUBLISH_ARGS[@]}"
