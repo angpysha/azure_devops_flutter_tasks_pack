@@ -1,12 +1,21 @@
 name: Publish to Azure Marketplace
 
-# Required GitHub repository secrets (Settings → Secrets and variables → Actions):
-#   AZURE_DEVOPS_EXT_PAT — Personal Access Token with "Marketplace (publish)" scope
-#     Create at: https://dev.azure.com/{org}/_usersSettings/tokens
+# Required GitHub repository secret:
+#   AZURE_DEVOPS_EXT_PAT
 #
-# This extension is public on the Marketplace. Do not set AZDO_SHARE_WITH — sharing
-# with orgs implies a private extension and fails with:
-# "An extension that was made public can't be changed to private."
+# The PAT must belong to a Microsoft account that is Owner or Contributor on the
+# Marketplace publisher "AndriiPetrovskyi":
+#   https://marketplace.visualstudio.com/manage/publishers/AndriiPetrovskyi/hub
+#
+# Create the PAT at https://dev.azure.com/_usersSettings/tokens with:
+#   - Organizations: All accessible organizations  (NOT a single org)
+#   - Scopes: Marketplace (Manage)  (Manage, not only Publish)
+#
+# Use the same account as your Azure DevOps MarketPlaceServiceConnection if
+# publishing from Azure Pipelines already works.
+#
+# 403 "Make changes to, share, or view certificate of an existing extension"
+# means the PAT account is not a member of publisher AndriiPetrovskyi.
 
 on:
   workflow_dispatch:
@@ -54,6 +63,21 @@ jobs:
           mv ./*.vsix vsix_output/
           ls -la vsix_output/
 
+      - name: Verify Marketplace publish access
+        env:
+          AZURE_DEVOPS_EXT_PAT: ${{ secrets.AZURE_DEVOPS_EXT_PAT }}
+        run: |
+          if [ -z "$AZURE_DEVOPS_EXT_PAT" ]; then
+            echo "Missing secret AZURE_DEVOPS_EXT_PAT."
+            exit 1
+          fi
+
+          tfx extension show \
+            --publisher AndriiPetrovskyi \
+            --extension-id flutter-build-help-tools \
+            --auth-type pat \
+            --token "$AZURE_DEVOPS_EXT_PAT"
+
       - name: Publish to Visual Studio Marketplace
         env:
           AZURE_DEVOPS_EXT_PAT: ${{ secrets.AZURE_DEVOPS_EXT_PAT }}
@@ -61,11 +85,6 @@ jobs:
           VSIX_FILE="$(find vsix_output -maxdepth 1 -name '*.vsix' -print -quit)"
           if [ -z "$VSIX_FILE" ]; then
             echo "No VSIX file found in vsix_output"
-            exit 1
-          fi
-
-          if [ -z "$AZURE_DEVOPS_EXT_PAT" ]; then
-            echo "Missing secret AZURE_DEVOPS_EXT_PAT. Add it under GitHub repository secrets."
             exit 1
           fi
 
