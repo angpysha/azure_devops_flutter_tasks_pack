@@ -1,0 +1,85 @@
+name: Publish to Azure Marketplace
+
+# Required GitHub repository secrets (Settings → Secrets and variables → Actions):
+#   AZURE_DEVOPS_EXT_PAT — Personal Access Token with "Marketplace (publish)" scope
+#     Create at: https://dev.azure.com/{org}/_usersSettings/tokens
+#
+# Optional secrets:
+#   AZDO_SHARE_WITH — Azure DevOps organization name(s) to share the extension with
+#     (comma-separated). Leave unset for a public extension with no extra sharing.
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - "v*"
+
+concurrency:
+  group: publish-marketplace
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    name: Build and publish extension
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install root dependencies
+        run: npm install
+
+      - name: Install TypeScript compiler
+        run: npm install -g typescript
+
+      - name: Install task dependencies
+        run: npm run install_packages
+
+      - name: Compile TypeScript tasks
+        run: npm run compile_tasks
+
+      - name: Install TFX CLI
+        run: npm install -g tfx-cli
+
+      - name: Package VSIX
+        run: |
+          tfx extension create --manifest-globs ./vss-extension.json
+          mkdir -p vsix_output
+          mv ./*.vsix vsix_output/
+          ls -la vsix_output/
+
+      - name: Publish to Visual Studio Marketplace
+        env:
+          AZURE_DEVOPS_EXT_PAT: ${{ secrets.AZURE_DEVOPS_EXT_PAT }}
+          AZDO_SHARE_WITH: ${{ secrets.AZDO_SHARE_WITH }}
+        run: |
+          VSIX_FILE="$(find vsix_output -maxdepth 1 -name '*.vsix' -print -quit)"
+          if [ -z "$VSIX_FILE" ]; then
+            echo "No VSIX file found in vsix_output"
+            exit 1
+          fi
+
+          if [ -z "$AZURE_DEVOPS_EXT_PAT" ]; then
+            echo "Missing secret AZURE_DEVOPS_EXT_PAT. Add it under GitHub repository secrets."
+            exit 1
+          fi
+
+          PUBLISH_ARGS=(
+            extension publish
+            --publisher AndriiPetrovskyi
+            --vsix "$VSIX_FILE"
+            --auth-type pat
+            --token "$AZURE_DEVOPS_EXT_PAT"
+          )
+
+          if [ -n "$AZDO_SHARE_WITH" ]; then
+            PUBLISH_ARGS+=(--share-with "$AZDO_SHARE_WITH")
+          fi
+
+          tfx "${PUBLISH_ARGS[@]}"

@@ -41,11 +41,16 @@ async function distribute() {
     toolRunner.arg(distribuionGroups);
 
     if (releaseNotes !== undefined) {
-        toolRunner.arg('--release-notes');
+        const releaseNotesStat = fs.statSync(releaseNotes);
+        if (releaseNotesStat.isFile()) {
+            toolRunner.arg('--release-notes');
 
-        var releaseNotesText = fs.readFileSync(releaseNotes, 'utf8');
-        releaseNotesText = releaseNotesText.substring(0, 200);
-        toolRunner.arg(`"${releaseNotesText}"`);
+            var releaseNotesText = fs.readFileSync(releaseNotes, 'utf8');
+            releaseNotesText = releaseNotesText.substring(0, 200);
+            toolRunner.arg(`"${releaseNotesText}"`);
+        } else {
+            tl.warning(`Release notes path is not a file, skipping: ${releaseNotes}`);
+        }
     }
 
     const noInteractive = tl.getBoolInput('noInteractive', false);

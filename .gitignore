@@ -6,4 +6,4 @@ yarn.lock
 
 *.vsix
 
-tasks/**/*.js
+tasks/**/*.js_code_agent/
